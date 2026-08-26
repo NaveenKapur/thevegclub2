@@ -1,0 +1,62 @@
+/* Supplier restaurants. Adding one here (or in the CRM) makes it appear
+   on every relevant hub, sitemap entry and schema block automatically. */
+export const RESTAURANTS = [
+  {
+    slug: '64-6', name: '64/6', kind: 'All-day dining · buffet',
+    supplier: 'Country Inn & Suites by Radisson, Sahibabad',
+    cuisines: ['North Indian','South Indian','Chinese','Asian','Continental','Italian','Mexican','Thai','Biryani','Pizza','Street Food','Desserts'],
+    costForTwo: 'Counter ₹2,599 – ₹3,299 per guest',
+    hours: 'All-day breakfast · lunch · dinner',
+    maxGuests: 20,
+    facilities: ['Buffet','Live counters','Valet parking','Air conditioned','Family friendly'],
+    veganOptions: 'pending',           // pending | verified | none
+    noOnionNoGarlic: 'on request',
+    area: 'Sahibabad', lat: null, lng: null,
+    about: '64/6 is the all-day buffet restaurant at Country Inn & Suites by Radisson, Sahibabad — a skylit room with live counters and buffet spreads across breakfast, lunch and dinner.',
+    photos: ['s_atrium','s_buffet','s_live','s_hall','s_plants','s_salad','s_long'],
+  },
+  {
+    slug: '3bs', name: "3B's", kind: 'All-day dining · poolside',
+    supplier: 'Country Inn & Suites by Radisson, Sahibabad',
+    cuisines: ['North Indian','Chinese','Continental','Italian','Thai','Mexican','Biryani','Pizza','Desserts'],
+    costForTwo: '₹1,500 for two',
+    hours: 'Open all day · dinner service till late',
+    maxGuests: 20,
+    facilities: ['Poolside','DJ','Valet parking','Romantic','Family friendly'],
+    veganOptions: 'pending',
+    noOnionNoGarlic: 'on request',
+    area: 'Sahibabad', lat: null, lng: null,
+    about: 'Bold Flavours, Better Choices, Balanced Experience. An open-air restaurant on two levels around a lit pool, with a living wall and table-side flambé service.',
+    photos: ['hero','deck','lounge','night','bar','food','romance','wall'],
+  },
+  {
+    slug: 'tatva', name: 'Tatva', kind: 'À la carte · fine dining',
+    supplier: 'Country Inn & Suites by Radisson, Sahibabad',
+    cuisines: ['North Indian','Asian','Chinese','Continental','Italian','Mexican','Thai','Pizza','Desserts'],
+    costForTwo: '₹1,500 for two',
+    hours: 'Dinner service',
+    maxGuests: 20,
+    facilities: ['Indoor','Full bar','Romantic','Valet parking','Family friendly'],
+    veganOptions: 'pending',
+    noOnionNoGarlic: 'on request',
+    area: 'Sahibabad', lat: null, lng: null,
+    about: 'Rooted in the philosophy of purity, balance and authentic flavours — a thoughtfully curated à la carte menu inspired by Indian culinary heritage and global influences.',
+    photos: ['t_hall','t_bar','t_long','t_sofas','t_barclose','t_barrels'],
+  },
+  {
+    slug: 'little-italy', name: 'Little Italy', kind: 'Italian · terrace dining',
+    supplier: 'Country Inn & Suites by Radisson, Sahibabad',
+    cuisines: ['Italian','Mexican','Pizza','Pasta','Desserts'],
+    costForTwo: '₹1,500 for two',
+    hours: 'Dinner service',
+    maxGuests: 20,
+    facilities: ['Terrace','Dance floor','Full bar','Romantic','Valet parking','Family friendly'],
+    veganOptions: 'pending',
+    noOnionNoGarlic: 'on request',
+    area: 'Sahibabad', lat: null, lng: null,
+    about: 'Hand-tossed pizzas and artisanal pastas on the terrace. Classic Italian flavours with a contemporary touch.',
+    photos: ['li_terrace','li_wall','li_wide','li_upper','li_dessert'],
+  },
+]
+
+export const bySlug = (s) => RESTAURANTS.find(r => r.slug === s)

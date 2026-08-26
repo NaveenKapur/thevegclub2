@@ -1,0 +1,48 @@
+import Link from 'next/link'
+import { getDeals } from '../../lib/crm'
+import { RESTAURANTS } from '../../data/restaurants'
+import { HUBS } from '../../data/deals'
+import DealCard from '../../components/DealCard'
+import { JsonLd, offerList, breadcrumbs } from '../../lib/schema'
+
+export const revalidate = 300
+
+export const metadata = {
+  title: 'Vegetarian Restaurant Deals in Delhi NCR',
+  description: 'Every live vegetarian dining deal in Ghaziabad and Sahibabad — buffets from ₹1,399, 1+1 dinners, 20% off à la carte. Book for ₹50.',
+  alternates: { canonical: '/deals' },
+}
+
+export default async function Deals() {
+  const { deals } = await getDeals()
+  const bySlug = Object.fromEntries(RESTAURANTS.map(r => [r.slug, r]))
+  const live = deals.filter(d => d.status === 'live')
+
+  return (
+    <main>
+      <JsonLd data={offerList(live, bySlug)} />
+      <JsonLd data={breadcrumbs([{ name: 'Home', href: '/' }, { name: 'Deals', href: '/deals' }])} />
+
+      <div className="wrap intro">
+        <h1>Vegetarian restaurant deals in Delhi NCR</h1>
+        <p>Every live offer across our restaurants in Sahibabad and Ghaziabad. All prices include taxes. The ₹50 reservation fee is charged separately.</p>
+        <div className="chipsrow" style={{ marginTop: 16 }}>
+          {Object.entries(HUBS).map(([slug, h]) => (
+            <Link key={slug} className="pill" href={`/deals/${slug}`} style={{ textDecoration: 'none' }}>
+              {h.title}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="wrap sec">
+        {live.map(d => <DealCard key={d.slug + d.outlet} deal={d} restaurant={bySlug[d.outlet]} />)}
+      </div>
+
+      <div className="wrap sec">
+        <h2>How the ₹50 works</h2>
+        <p className="sub">Choose a deal and fill the booking form. Pay ₹50 to hold the table. Your coupon arrives on WhatsApp with a code. Show it at the restaurant and the discount is applied to your bill. The ₹50 is not refundable and is not adjusted against the bill.</p>
+      </div>
+    </main>
+  )
+}
