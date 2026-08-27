@@ -5,6 +5,7 @@ import { weekdayDeals, weekendDeals } from '../../../data/deals'
 import { getDeals } from '../../../lib/crm'
 import DealCard from '../../../components/DealCard'
 import Faq from '../../../components/Faq'
+import DealBox from '../../../components/DealBox'
 import { JsonLd, restaurant as restaurantSchema, offer, breadcrumbs } from '../../../lib/schema'
 import { SITE, phoneDisplay } from '../../../lib/config'
 
@@ -71,7 +72,9 @@ export default async function RestaurantPage({ params }) {
         </div>
 
         <div className="rhead">
-          <h1>{r.name}</h1>
+          <div className="rtop">
+            <div className="rtopmain">
+              <h1>{r.name}</h1>
           <div className="chips">
             {r.status === 'coming_soon' ? <span className="chip" style={{ color: 'var(--brass)', fontWeight: 700 }}>Coupons coming soon</span> : null}
             {enquiry ? <span className="chip" style={{ color: 'var(--brass)', fontWeight: 700 }}>Minimum {r.minGroup} guests</span> : null}
@@ -92,6 +95,9 @@ export default async function RestaurantPage({ params }) {
             {enquiry ? <Link className="btn" href={`/book?enquiry=${r.slug}`} style={{ textDecoration: 'none' }}>Enquire about a date</Link> : null}
             <a className="btn ghost" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to ask about ${r.name}`)}`}
                target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>Ask on WhatsApp</a>
+          </div>
+            </div>
+            <DealBox from={1399} compact at={live ? null : '64/6'} />
           </div>
         </div>
 

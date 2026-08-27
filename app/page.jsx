@@ -4,30 +4,36 @@ import { RESTAURANTS, bySlug } from '../data/restaurants'
 import { weekdayDeals } from '../data/deals'
 import DealCard, { saving } from '../components/DealCard'
 import Faq from '../components/Faq'
+import DealBox from '../components/DealBox'
 import { JsonLd, organization, website, offerList, faq } from '../lib/schema'
 import { SITE } from '../lib/config'
+import { RACK, money } from '../lib/pricing'
 
 export const revalidate = 300
 
 export const metadata = {
-  title: 'Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,800 | Veg Club',
-  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,800 for two, dinner 1+1 ₹3,300 — half the counter rate. Book for ₹50, coupon on WhatsApp.',
+  title: 'Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,799 | Veg Club',
+  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. Book for ₹50.',
   alternates: { canonical: '/' },
 }
 
 const FAQS = [
   { q: 'What does a vegetarian buffet cost in Ghaziabad?',
-    a: 'At 64/6 in Sahibabad the lunch buffet is ₹1,700 per guest and dinner is ₹1,900 per guest, all taxes included. Breakfast is ₹1,399. The weekday 1+1 coupons bring lunch down to ₹1,400 per guest and dinner to ₹1,650.' },
+    a: 'The counter price at 64/6, Sahibabad is ₹2,599 for breakfast, ₹2,799 for lunch and ₹3,299 for dinner per guest. Booked here, one guest pays ₹1,399 for breakfast, ₹1,699 for lunch and ₹1,899 for dinner — all taxes included.' },
   { q: 'How does the 1+1 work?',
-    a: 'Two guests eat the full buffet and you pay for roughly one. Lunch 1+1 is ₹2,800 for two; dinner 1+1 is ₹3,300 for two. Both run Monday to Friday and need a minimum of two guests seated.' },
+    a: 'Two guests eat the full buffet for one deal price. Weekday lunch 1+1 is ₹2,799 for two against a ₹5,598 counter price — a 50% saving. Weekday dinner 1+1 is ₹3,299 for two against ₹6,598.' },
+  { q: 'Are weekend rates the same?',
+    a: 'No. On Saturday and Sunday, lunch for two is ₹3,199 and dinner for two is ₹3,599. Pick a weekend date in the booking form and the bill updates itself.' },
+  { q: 'What if we are three, or five?',
+    a: 'The bill pairs guests into 1+1 deals and charges any remaining guest the single rate — whichever combination is cheapest for you. Three at weekday lunch is ₹4,498; five at weekday dinner is ₹8,497.' },
+  { q: 'Do children pay?',
+    a: 'Children up to 5 years are complimentary and are not added to the bill at all. Children above 5 are counted as guests at the deal rate.' },
   { q: 'What is the ₹50 reservation fee?',
-    a: 'It holds your table and locks the coupon price. It is not refundable and is not adjusted against your restaurant bill. On a dinner 1+1 you still save ₹3,298.' },
+    a: 'It holds your table and locks the deal price. It is not refundable and is not adjusted against your restaurant bill.' },
   { q: 'Are these deals available on Zomato or Dineout?',
     a: 'No. These prices are available only on thevegclub.com.' },
   { q: 'Do the restaurants cook without onion and garlic?',
     a: 'Sattvic dishes without onion or garlic can be prepared on request. Mention it when you book so the kitchen is ready.' },
-  { q: 'Are weekend rates the same?',
-    a: 'No. Saturday and Sunday rates differ from the weekday ones. The weekend 1+1 coupons are listed on the 64/6 restaurant page.' },
 ]
 
 export default async function Home() {
@@ -50,6 +56,7 @@ export default async function Home() {
         <div>
           <h1>Veg buffet deals.<br />One <em>₹{SITE.fee}</em> booking.</h1>
           <p>Two guests eat the full vegetarian buffet at 64/6, Sahibabad, for the price of one.
+             Counter price {money(RACK.lunch * 2)} — you pay {money(2799)}.
              Pay ₹{SITE.fee}, get your coupon on WhatsApp, show it at the table.</p>
           <div className="ctarow">
             <Link className="btn" href="/deals/buffet" style={{ textDecoration: 'none' }}>See buffet deals</Link>
@@ -62,15 +69,7 @@ export default async function Home() {
             <span className="step"><b>4</b>Show it at the table</span>
           </div>
         </div>
-        <aside className="herocard">
-          <h3>What the ₹{SITE.fee} does</h3>
-          <p>It holds your table and locks the coupon price. Not refundable, not adjusted against your bill — on a dinner 1+1 you still save ₹3,298.</p>
-          <dl>
-            <dt>Lunch 1+1</dt><dd>₹2,800 for two</dd>
-            <dt>Dinner 1+1</dt><dd>₹3,300 for two</dd>
-            <dt>To reserve</dt><dd>₹{SITE.fee}</dd>
-          </dl>
-        </aside>
+        <DealBox from={1399} />
       </div>
 
       {/* ── restaurants FIRST ── */}
@@ -94,7 +93,7 @@ export default async function Home() {
                   <h3>{r.name}</h3>
                   <div className="meta">{r.kind}{r.status === 'live' ? ' · ' + r.costForTwo : ''}</div>
                   {r.status === 'live'
-                    ? <div className="best">Best deal: <b>Lunch 1+1</b> — ₹2,800 for two</div>
+                    ? <div className="best">Best deal: <b>Lunch 1+1</b> — {money(2799)} for two</div>
                     : enq
                       ? <div className="best">Whole-terrace hire, minimum 50 guests</div>
                       : <div className="best">Coupons opening shortly</div>}
@@ -113,12 +112,12 @@ export default async function Home() {
           <div className="body">
             <span className="tag">The one to book</span>
             <h2>64/6 — the full vegetarian buffet</h2>
-            <p>Live counters, forty dishes and a dessert table, twice over. The weekday 1+1 is half
-               the counter rate and the sharpest price on this site.</p>
+            <p>Live counters, forty dishes and a dessert table, twice over. The weekday 1+1 is
+             half the counter rate — the sharpest price on this site.</p>
             <dl>
-              <dt>Lunch 1+1 · Mon–Fri</dt><dd>₹{lunch ? lunch.priceTotal.toLocaleString('en-IN') : '2,800'} for two</dd>
-              <dt>Dinner 1+1 · Mon–Fri</dt><dd>₹{dinner ? dinner.priceTotal.toLocaleString('en-IN') : '3,300'} for two</dd>
-              <dt>Buffet from</dt><dd>₹1,399 per guest</dd>
+              <dt>Lunch 1+1 · Mon–Fri</dt><dd>{money(2799)} <s style={{opacity:.55,fontWeight:400}}>{money(RACK.lunch*2)}</s></dd>
+              <dt>Dinner 1+1 · Mon–Fri</dt><dd>{money(3299)} <s style={{opacity:.55,fontWeight:400}}>{money(RACK.dinner*2)}</s></dd>
+              <dt>Breakfast · per guest</dt><dd>{money(1399)} <s style={{opacity:.55,fontWeight:400}}>{money(RACK.breakfast)}</s></dd>
             </dl>
             <div className="ctarow">
               <Link className="btn" href="/deals/buffet" style={{ textDecoration: 'none' }}>All buffet deals</Link>

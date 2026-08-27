@@ -354,3 +354,174 @@ a.pill:hover{border-color:var(--brass);color:var(--brass)}
 .feature dt{color:#9DB0A2}
 .feature dd{margin:0;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:var(--on-forest)}
 .feature .ctarow{margin-top:22px}
+
+/* ══ BOOKING CART — restaurant bill styling ═════════════════════════ */
+.cart{max-width:620px;margin:0 auto}
+.cstep{display:flex;gap:14px;padding:22px 0;border-bottom:1px solid var(--line)}
+.cstep:first-child{padding-top:6px}
+.cnum{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+  background:var(--forest);color:var(--on-forest);
+  font-size:13px;font-weight:700;display:grid;place-items:center;margin-top:2px
+}
+.cbody{flex:1 1 auto;min-width:0}
+.cbody h3{font-family:var(--f-display);font-size:18px;font-weight:500;margin:0 0 12px}
+.cstep.bad .cnum{background:#B3261E}
+
+/* meal picker */
+.meals{display:grid;gap:9px}
+@media(min-width:520px){.meals{grid-template-columns:repeat(3,1fr)}}
+.mealbtn{
+  display:flex;flex-direction:column;gap:3px;text-align:left;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:13px 14px;cursor:pointer;color:var(--ink);
+  transition:border-color .18s ease,background-color .18s ease
+}
+.mealbtn:hover{border-color:var(--brass)}
+.mealbtn[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--on-forest)}
+.mealbtn .mn{font-family:var(--f-display);font-size:17px;font-weight:500}
+.mealbtn .mw{font-size:12px;color:var(--ink-3)}
+.mealbtn .mp{font-size:12.5px;font-weight:700;color:var(--brass);font-variant-numeric:tabular-nums}
+.mealbtn[aria-pressed="true"] .mw{color:#9DB0A2}
+.mealbtn[aria-pressed="true"] .mp{color:var(--brass-2)}
+
+.daynote{font-size:13px;margin:9px 0 0;color:var(--ink-2)}
+.daynote.wknd{color:var(--brass);font-weight:700}
+
+/* the bill */
+.bill{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 18px 16px;margin:22px 0 4px;
+  box-shadow:var(--shadow)
+}
+.billhead{
+  display:flex;justify-content:space-between;gap:12px;
+  font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:700;padding-bottom:12px;border-bottom:1px dashed var(--line)
+}
+.billrows{padding:4px 0}
+.brow{
+  display:flex;justify-content:space-between;gap:16px;align-items:baseline;
+  padding:9px 0;font-size:14.5px;font-variant-numeric:tabular-nums
+}
+.brow small{color:var(--ink-3);font-size:12.5px;margin-left:5px}
+.brow b{font-weight:700;white-space:nowrap}
+.brow.muted{color:var(--ink-3)}
+.brow.muted s{opacity:.8}
+.brow.free b{color:var(--ok, #1F6B4C)}
+.brow.save{
+  border-top:1px dashed var(--line);margin-top:4px;padding-top:12px;color:var(--brass)
+}
+.brow.save b{color:var(--brass)}
+.brow.save em{font-style:normal;font-weight:400;font-size:12.5px}
+.brow.subtotal{
+  border-top:1px solid var(--line);margin-top:6px;padding-top:13px;
+  font-family:var(--f-display);font-size:17px
+}
+.brow.subtotal b{font-family:var(--f-display);font-size:22px;font-weight:600}
+.brow.due{
+  background:var(--forest);color:var(--on-forest);
+  margin:12px -18px -16px;padding:14px 18px;border-radius:0 0 var(--r) var(--r);
+  font-size:15px
+}
+.brow.due b{font-family:var(--f-display);font-size:21px;font-weight:600}
+.bill + .hint,.bill .hint{color:var(--ink-3)}
+
+/* rack-rate strip, shown on deal cards */
+.rack{display:flex;gap:10px;align-items:baseline;font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.rack s{opacity:.85}
+.rack b{color:var(--brass);font-weight:700}
+
+/* ══ HERO DEAL BOX ═══════════════════════════════════════════════════ */
+.dealbox{position:relative;overflow:hidden;text-align:left;padding:26px 24px 22px}
+.dealbox::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% -10%,rgba(196,146,47,.30),transparent 62%)
+}
+.dealbox > *{position:relative}
+.dealbox .eyebrow{
+  display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--brass-2);font-weight:700;margin-bottom:8px
+}
+.dealbox .bignum{
+  font-family:var(--f-display);font-weight:600;letter-spacing:-.035em;line-height:.9;
+  font-size:clamp(52px,12vw,74px);color:var(--on-forest)
+}
+.dealbox .bignum .per{font-size:.42em;font-weight:400;letter-spacing:0;opacity:.65;margin-left:2px}
+.dealbox .allin{
+  margin-top:8px;font-size:14px;color:var(--brass-2);font-weight:700;
+  letter-spacing:.02em
+}
+.dealbox .dealpts{
+  list-style:none;margin:18px 0 20px;padding:16px 0 0;
+  border-top:1px solid rgba(237,241,233,.22);
+  display:flex;flex-direction:column;gap:9px
+}
+.dealbox .dealpts li{
+  position:relative;padding-left:24px;font-size:14.5px;color:#C3D1C6;margin:0
+}
+.dealbox .dealpts li b{color:var(--on-forest);font-weight:700}
+.dealbox .dealpts li::before{
+  content:"";position:absolute;left:0;top:7px;width:11px;height:6px;
+  border-left:2px solid var(--brass-2);border-bottom:2px solid var(--brass-2);
+  transform:rotate(-45deg)
+}
+.dealbox .btn{width:100%;text-align:center;display:block}
+.dealbox .finep{margin:12px 0 0;font-size:12px;color:#93A797;line-height:1.45}
+
+/* the counter-price strip that sits under the headline */
+.counterline{
+  display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;margin:16px 0 0;
+  font-size:13.5px;color:var(--ink-2);
+  background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:7px 14px
+}
+.counterline s{color:var(--ink-3)}
+.counterline b{color:var(--brass);font-weight:700}
+
+/* A green button on a green card is invisible — inside the dark deal box
+   the CTA switches to brass. */
+.dealbox .btn{
+  background:var(--brass-2);color:#241703;border-color:var(--brass-2);
+  font-size:15px;padding:14px 18px
+}
+.dealbox .btn:hover{background:#FFF;border-color:#FFF;color:#241703}
+
+/* The booking page runs on the light ground; the old dark wrapper is gone. */
+.bk{max-width:660px;margin:0 auto;padding-bottom:40px}
+
+/* the fine print sits under the bill card, never beneath the total row */
+.billnote{margin:10px 2px 0;color:var(--ink-3)}
+
+/* counter-price line: a pill on desktop, a plain line on mobile where it wraps */
+.counterline{flex-wrap:wrap}
+@media(max-width:620px){
+  .counterline{
+    display:block;background:none;border:0;border-left:2px solid var(--brass);
+    border-radius:0;padding:2px 0 2px 12px;margin-top:14px;font-size:13px;line-height:1.5
+  }
+  .counterline s{display:block}
+  .counterline b{display:inline}
+}
+
+/* restaurant page: name on the left, deal box on the right at width */
+.rtop{display:block}
+@media(min-width:960px){
+  .rtop{display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start}
+  .rtop .rtopmain{min-width:0}
+}
+.dealbox.compact{display:block;margin-top:18px}
+@media(min-width:960px){.dealbox.compact{margin-top:6px}}
+.dealbox.compact .bignum{font-size:clamp(44px,7vw,58px)}
+
+/* headline price line — number and unit sit on one baseline */
+.dealbox .bigline{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.dealbox .slashper{
+  font-family:var(--f-body);font-size:17px;font-weight:700;
+  color:var(--brass-2);letter-spacing:.01em
+}
+.dealbox .atline{
+  margin:12px 0 0;font-size:13.5px;color:#B9C8BD;
+  padding:8px 12px;border-radius:6px;background:rgba(237,241,233,.07)
+}
+.dealbox .atline b{color:var(--brass-2);font-weight:700}
+.dealbox .dealpts{margin-top:16px}

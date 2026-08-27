@@ -1,37 +1,37 @@
 import Link from 'next/link'
+import { money } from '../lib/pricing'
 
-const money = n => '₹' + Number(n).toLocaleString('en-IN')
-
-export function saving(d) {
-  if (d.percentOff) return d.percentOff
-  if (d.rack && d.pricePerGuest) return Math.round((1 - d.pricePerGuest / d.rack) * 100)
-  return null
-}
+export function saving(d) { return d.savingPct ?? null }
 
 export default function DealCard({ deal, restaurant }) {
-  const off = saving(deal)
+  const off = deal.savingPct
+  const pair = deal.type === 'one_plus_one'
   return (
     <div className="deal">
       <div className="nm">
         {deal.name}
         {off ? <span className={'badge' + (off >= 50 ? '' : ' q')}>{off}% off</span> : null}
       </div>
+
       <div className="mt">
         <span>{restaurant?.name || deal.outlet}</span>
         <span>{deal.note}</span>
-        <span>Min {deal.minGuests} guest{deal.minGuests > 1 ? 's' : ''}</span>
+        <span>{pair ? '2 guests' : 'Per guest'}</span>
       </div>
+
       <div className="pr">
-        {deal.priceTotal ? (
-          <><span className="a">{money(deal.priceTotal)}</span><span className="b">{money(deal.pricePerGuest)} per guest</span></>
-        ) : deal.pricePerGuest ? (
-          <><span className="a">{money(deal.pricePerGuest)}</span><span className="b">per guest</span></>
-        ) : (
-          <><span className="a">{deal.percentOff}%</span><span className="b">off food</span></>
-        )}
+        <span className="a">{money(pair ? deal.priceTotal : deal.pricePerGuest)}</span>
+        <span className="b">{pair ? `${money(deal.pricePerGuest)} per guest` : 'per guest'}</span>
       </div>
+
+      {/* Rack comparison — this is what makes the deal feel like a deal. */}
+      <div className="rack" style={{ gridColumn: '1 / -1' }}>
+        <span>Counter price <s>{money(deal.rackTotal)}</s></span>
+        <b>You save {money(deal.saving)}</b>
+      </div>
+
       <div className="cta">
-        <Link className="btn ghost" href={`/book?deal=${deal.slug}`} style={{ textDecoration: 'none', display: 'inline-block' }}>
+        <Link className="btn ghost" href="/book" style={{ textDecoration: 'none', display: 'inline-block' }}>
           Book this deal
         </Link>
       </div>
