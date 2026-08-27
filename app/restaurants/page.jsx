@@ -6,12 +6,15 @@ import Faq from '../../components/Faq'
 import Reveal from '../../components/Reveal'
 import { JsonLd, faq, breadcrumbs, restaurant as rSchema } from '../../lib/schema'
 import { SITE } from '../../lib/config'
+import { pageMeta } from '../../lib/seo'
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Sahibabad & Ghaziabad',
   description: 'Pure vegetarian restaurant deals in Sahibabad, Ghaziabad and Indirapuram. Buffet coupons from ₹1,399 a head, 1+1 dinners at half the counter price. Book for ₹50.',
-  alternates: { canonical: '/restaurants' },
-}
+  path: '/restaurants',
+  og: 'restaurants',
+  imageAlt: 'Vegetarian restaurant deals in Sahibabad and Ghaziabad from ₹1,399 a person',
+})
 
 const OCCASIONS = [
   { t: 'Kitty party deals', d: 'Weekday lunch buffet for a group, reserved seating, up to 20 guests. The 1+1 rate applies to every pair.', img: 's_hall' },

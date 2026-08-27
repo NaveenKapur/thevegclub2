@@ -59,9 +59,9 @@ button{font-family:inherit}
 .intro h1{font-size:clamp(25px,6.4vw,40px);line-height:1.1;letter-spacing:-.02em}
 .intro h1 em{font-style:italic;color:var(--brass)}
 .intro p{color:var(--ink-2);margin:10px 0 0;font-size:15px;max-width:52ch}
-.steps{display:flex;gap:8px;margin-top:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-.step{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
-.step b{color:var(--brass);font-weight:700;margin-right:5px}
+.stepchips{display:flex;gap:8px;margin-top:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.stepchip{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.stepchip b{color:var(--brass);font-weight:700;margin-right:5px}
 
 /* ---------- restaurant cards ---------- */
 .sec{padding-block:26px}
@@ -174,19 +174,31 @@ button{font-family:inherit}
 body{padding-bottom:74px}
 
 .introgrid{display:block}
-.herocard{display:none}
+
+/*  The panel paints itself at EVERY width.
+ *  Colour must never live only inside a media query — that is how it ended
+ *  up unpainted on phones while looking correct on desktop. Only layout
+ *  changes at the breakpoint below.
+ */
+.herocard{
+  display:block;
+  background:var(--forest);
+  color:var(--on-forest);
+  border-radius:var(--r);
+  padding:24px;
+  margin-top:22px;
+}
+.herocard h3{font-size:19px;color:var(--on-forest)}
+.herocard p{font-size:14px;color:#B9C8BD;margin:10px 0 0}
+.herocard dl{margin:18px 0 0;padding-top:14px;border-top:1px solid rgba(237,241,233,.2);
+  display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:14px}
+.herocard dt{color:#9DB0A2}
+.herocard dd{margin:0;font-weight:700;text-align:right;color:var(--on-forest)}
+
 @media(min-width:900px){
+  /* layout only — no colours here */
   .introgrid{display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center;padding-block:34px 10px}
-  .herocard{
-    display:block;background:var(--forest);color:var(--on-forest);
-    border-radius:var(--r);padding:24px
-  }
-  .herocard h3{font-size:19px}
-  .herocard p{font-size:14px;color:#B9C8BD;margin:10px 0 0}
-  .herocard dl{margin:18px 0 0;padding-top:14px;border-top:1px solid rgba(237,241,233,.2);
-    display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:14px}
-  .herocard dt{color:#9DB0A2}
-  .herocard dd{margin:0;font-weight:700;text-align:right;color:var(--on-forest)}
+  .herocard{margin-top:0}
 }
 
 /* inline CTA row */
@@ -439,7 +451,9 @@ a.pill:hover{border-color:var(--brass);color:var(--brass)}
   background:radial-gradient(120% 90% at 82% -10%,rgba(196,146,47,.30),transparent 62%)
 }
 .dealbox > *{position:relative}
-.dealbox .eyebrow{
+.dealbox .eyebrow,
+.intro .dealbox .eyebrow,
+aside.dealbox .eyebrow{
   display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--brass-2);font-weight:700;margin-bottom:8px
 }
@@ -591,7 +605,102 @@ a.pill:hover{border-color:var(--brass);color:var(--brass)}
 .intro .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--brass);font-weight:700;margin:0 0 12px}
 
-/* The deal box is the main draw — it must show on phones, where the old
-   .herocard rule hid it below 900px. */
-.dealbox{display:block!important;margin-top:20px}
-@media(min-width:900px){.dealbox{margin-top:0}}
+/* Deal box inherits .herocard's painting at every width — nothing to override. */
+
+/* ══ BREADCRUMBS ═════════════════════════════════════════════════════ */
+.crumbs{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:16px 0 0;font-size:13.5px;color:var(--ink-3)
+}
+.crumbs a{color:var(--ink-2);text-decoration:none}
+.crumbs a:hover{color:var(--brass);text-decoration:underline}
+.crumbs span[aria-hidden]{color:var(--ink-3);opacity:.6}
+.crumbs [aria-current]{color:var(--ink);font-weight:700}
+
+/* sibling hubs at the foot of a deal hub */
+.otherhubs{margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}
+.oh-lab{
+  display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:700;margin-bottom:12px
+}
+
+/* ══ BUTTONS ON DARK PANELS ══════════════════════════════════════════
+   An outline button takes its colour from the light-theme palette, which
+   is the same green as these panels — so it vanished. Any button inside a
+   dark surface switches to the brass/light treatment. Declared once, for
+   every dark panel on the site. */
+.feature .btn.ghost,
+.herocard .btn.ghost,
+.dealbox .btn.ghost,
+.endcta .btn.ghost,
+.formwrap .btn.ghost,
+.picked .btn.ghost{
+  color:var(--brass-2);
+  border-color:var(--brass-2);
+  background:transparent
+}
+.feature .btn.ghost:hover,
+.herocard .btn.ghost:hover,
+.dealbox .btn.ghost:hover,
+.endcta .btn.ghost:hover,
+.formwrap .btn.ghost:hover,
+.picked .btn.ghost:hover{
+  background:var(--brass-2);
+  border-color:var(--brass-2);
+  color:#241703
+}
+/* solid buttons on dark panels go brass, not green-on-green */
+.feature .btn:not(.ghost),
+.endcta .btn:not(.ghost),
+.formwrap .btn:not(.ghost){
+  background:var(--brass-2);border-color:var(--brass-2);color:#241703
+}
+.feature .btn:not(.ghost):hover,
+.endcta .btn:not(.ghost):hover,
+.formwrap .btn:not(.ghost):hover{
+  background:#FFFFFF;border-color:#FFFFFF;color:#241703
+}
+
+/* ══ RESTAURANT GALLERY ══════════════════════════════════════════════ */
+.gal{margin-top:8px;border-radius:var(--r);overflow:hidden}
+.galmain{
+  display:block;width:100%;padding:0;border:0;background:var(--panel-2);
+  cursor:zoom-in;position:relative;line-height:0;border-radius:var(--r);overflow:hidden
+}
+.galmain img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;
+  transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+.galmain:hover img{transform:scale(1.03)}
+.galzoom{
+  position:absolute;right:12px;bottom:12px;width:38px;height:38px;border-radius:50%;
+  background:rgba(11,20,16,.72);display:grid;place-items:center;pointer-events:none
+}
+.galzoom svg{width:19px;height:19px;fill:none;stroke:#EDF1E9;stroke-width:2;stroke-linecap:round}
+.galmain:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+
+.galmore{margin-top:10px;display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;
+  -webkit-overflow-scrolling:touch}
+.galthumb{
+  flex:0 0 auto;padding:0;border:2px solid transparent;background:none;
+  border-radius:7px;overflow:hidden;cursor:pointer;line-height:0;
+  transition:border-color .2s ease,opacity .2s ease;opacity:.72
+}
+.galthumb img{height:74px;width:auto;object-fit:cover;display:block}
+.galthumb:hover{opacity:1;border-color:var(--line)}
+.galthumb.on{opacity:1;border-color:var(--brass)}
+.galthumb:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+
+/* full-screen viewer */
+.lb{position:fixed;inset:0;background:rgba(8,14,11,.95);z-index:200;
+  display:grid;place-items:center;padding:20px}
+.lb img{max-width:100%;max-height:86vh;border-radius:6px;cursor:default}
+.lbclose{position:absolute;top:16px;right:18px;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;border:0;font-size:24px;cursor:pointer;line-height:1}
+.lbclose:hover{background:rgba(255,255,255,.26)}
+.lbnav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:70px;
+  background:rgba(255,255,255,.12);color:#fff;border:0;font-size:30px;cursor:pointer;border-radius:8px}
+.lbnav:hover{background:rgba(255,255,255,.24)}
+.lbnav.prev{left:14px}
+.lbnav.next{right:14px}
+.lbcount{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  color:#B9C8BD;font-size:13px;font-variant-numeric:tabular-nums}
+@media(max-width:560px){.lbnav{width:40px;height:58px;font-size:24px}}

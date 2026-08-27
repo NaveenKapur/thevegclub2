@@ -3,7 +3,9 @@ import { getDeals } from '../../../lib/crm'
 import { RESTAURANTS } from '../../../data/restaurants'
 import { HUBS, weekdayDeals } from '../../../data/deals'
 import DealCard from '../../../components/DealCard'
+import Link from 'next/link'
 import { JsonLd, offerList, breadcrumbs } from '../../../lib/schema'
+import { pageMeta } from '../../../lib/seo'
 
 export const revalidate = 300
 
@@ -24,7 +26,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }) {
   const m = META[params.slug]
   if (!m) return {}
-  return { title: m[0], description: m[1], alternates: { canonical: `/deals/${params.slug}` } }
+  /*  One card per hub — public/og/deals-<slug>.jpg, built by scripts/generate-og.mjs. */
+  return pageMeta({
+    title: m[0],
+    description: m[1],
+    path: `/deals/${params.slug}`,
+    og: `deals-${params.slug}`,
+    imageAlt: m[0],
+  })
 }
 
 export default async function Hub({ params }) {
@@ -45,6 +54,16 @@ export default async function Hub({ params }) {
         { name: hub.title, href: `/deals/${params.slug}` },
       ])} />
 
+      <div className="wrap">
+        <nav className="crumbs" aria-label="Breadcrumb">
+          <Link href="/">Home</Link>
+          <span aria-hidden="true">›</span>
+          <Link href="/deals">All deals</Link>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">{hub.title}</span>
+        </nav>
+      </div>
+
       <div className="wrap intro">
         <h1>{hub.title} in Ghaziabad &amp; Sahibabad</h1>
         <p>{description}</p>
@@ -53,7 +72,21 @@ export default async function Hub({ params }) {
       <div className="wrap sec">
         {matched.length
           ? matched.map(d => <DealCard key={d.slug + d.outlet} deal={d} restaurant={bySlug[d.outlet]} />)
-          : <p className="sub">No live deals in this category right now. <a href="/deals">See every deal</a>.</p>}
+          : <p className="sub">No live deals in this category right now.</p>}
+
+        <div className="ctarow" style={{ marginTop: 22 }}>
+          <Link className="btn" href="/book" style={{ textDecoration: 'none' }}>Book a table</Link>
+          <Link className="btn ghost" href="/deals" style={{ textDecoration: 'none' }}>← Back to all deals</Link>
+        </div>
+
+        <div className="otherhubs">
+          <span className="oh-lab">Other deals</span>
+          <div className="chipsrow">
+            {Object.entries(HUBS).filter(([s]) => s !== params.slug).map(([s, h]) => (
+              <Link key={s} className="pill" href={`/deals/${s}`} style={{ textDecoration: 'none' }}>{h.title}</Link>
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   )

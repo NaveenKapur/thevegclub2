@@ -1,6 +1,7 @@
 import './lp.css'
 import { notFound } from 'next/navigation'
 import { LANDING, GALLERY } from './config'
+import { pageMeta } from '../../../lib/seo'
 import LandingClient from './LandingClient'
 
 /*  Ad landing pages.
@@ -18,12 +19,17 @@ export function generateStaticParams() {
 export function generateMetadata({ params }) {
   const lp = LANDING[params.slug]
   if (!lp) return {}
-  return {
+  /*  Never indexed — but ad pages get shared on WhatsApp, so they still carry
+   *  a real card. The card matches the meal the campaign is selling. */
+  const card = { dinner: 'deals-dinner', lunch: 'deals-lunch', breakfast: 'deals-breakfast' }[lp.session] || 'home'
+  return pageMeta({
     title: `${lp.offer} — ₹${lp.price.toLocaleString('en-IN')} for two | Sahibabad`,
     description: lp.sub,
-    robots: { index: false, follow: true },   // never indexed
-    alternates: {},
-  }
+    path: `/lp/${params.slug}`,
+    og: card,
+    noindex: true,
+    imageAlt: `${lp.offer} at 64/6, Sahibabad`,
+  })
 }
 
 const money = n => Number(n).toLocaleString('en-IN')
@@ -51,9 +57,15 @@ export default function Landing({ params }) {
             <span className="save">SAVE {lp.savePct}%</span>
           </div>
 
+          <p className="alsoline r d5">
+            One ₹50 books <b>any buffet coupon at 64/6</b> — breakfast, lunch or dinner.
+          </p>
+
           <div className="ctas r d5">
-            <a className="cta" href="#book">Book for ₹50 →</a>
-            <a className="cta ghost" href="tel:+919988119793">Call to book</a>
+            <a className="cta" href="#book">Grab the deal — ₹50 →</a>
+            <a className="cta ghost wa"
+               href={`https://wa.me/919988119793?text=${encodeURIComponent(`Hi, I want the 64/6 ${lp.offer} coupon at ₹${lp.price.toLocaleString('en-IN')}`)}`}
+               target="_blank" rel="noopener">Book on WhatsApp</a>
           </div>
 
           <div className="trust r d6">

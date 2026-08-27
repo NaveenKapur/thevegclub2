@@ -4,14 +4,17 @@ import { RESTAURANTS } from '../../data/restaurants'
 import { HUBS, weekdayDeals } from '../../data/deals'
 import DealCard from '../../components/DealCard'
 import { JsonLd, offerList, breadcrumbs } from '../../lib/schema'
+import { pageMeta } from '../../lib/seo'
 
 export const revalidate = 300
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Delhi NCR',
   description: 'Every live vegetarian dining deal in Ghaziabad and Sahibabad — buffets from ₹1,399, 1+1 dinners, 20% off à la carte. Book for ₹50.',
-  alternates: { canonical: '/deals' },
-}
+  path: '/deals',
+  og: 'deals',
+  imageAlt: 'Live vegetarian buffet coupons in Ghaziabad — up to 50% off the counter price',
+})
 
 export default async function Deals() {
   const { deals } = await getDeals()

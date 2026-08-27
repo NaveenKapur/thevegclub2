@@ -1,11 +1,14 @@
 import BookingCart from '../../components/BookingCart'
 import { RACK, money } from '../../lib/pricing'
+import { pageMeta } from '../../lib/seo'
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Book a Table — 64/6, Sahibabad',
   description: 'Reserve a table at 64/6, Sahibabad. Choose guests, meal and day — the bill updates itself. Pay ₹50 to hold your table, coupon on WhatsApp.',
-  alternates: { canonical: '/book' },
-}
+  path: '/book',
+  og: 'book',
+  imageAlt: 'Book a vegetarian buffet table at 64/6, Sahibabad for ₹50',
+})
 
 export default function Book() {
   return (

@@ -6,8 +6,10 @@ import { getDeals } from '../../../lib/crm'
 import DealCard from '../../../components/DealCard'
 import Faq from '../../../components/Faq'
 import DealBox from '../../../components/DealBox'
+import Gallery from '../../../components/Gallery'
 import { JsonLd, restaurant as restaurantSchema, offer, breadcrumbs } from '../../../lib/schema'
 import { SITE, phoneDisplay } from '../../../lib/config'
+import { pageMeta } from '../../../lib/seo'
 
 export const revalidate = 300
 
@@ -26,12 +28,15 @@ export function generateMetadata({ params }) {
   const r = bySlug(params.slug)
   if (!r) return {}
   const m = META[params.slug]
-  return {
+  /*  Each restaurant has its own designed card in public/og/ — a raw photo makes
+   *  a poor share image because the price and the name are not on it. */
+  return pageMeta({
     title: m?.[0] || `${r.name} — Sahibabad`,
     description: m?.[1] || r.about.slice(0, 150),
-    alternates: { canonical: `/restaurants/${r.slug}` },
-    openGraph: { images: [{ url: `/images/${r.photos[0]}.jpg`, width: 1100, height: 700 }] },
-  }
+    path: `/restaurants/${r.slug}`,
+    og: `restaurants-${r.slug.replace(/[^a-z0-9]+/g, '-')}`,
+    imageAlt: `${r.name}, Country Inn & Suites Sahibabad — ${r.kind}`,
+  })
 }
 
 const TERMS = (r) => [
@@ -66,10 +71,7 @@ export default async function RestaurantPage({ params }) {
 
       <div className="wrap">
         <Link className="back" href="/restaurants" style={{ display: 'inline-block', textDecoration: 'none' }}>← All restaurants</Link>
-        <div className="gal"><a><img src={`/images/${r.photos[0]}.jpg`} alt={r.about.slice(0, 80)} /></a></div>
-        <div className="galmore">
-          {r.photos.slice(1).map(p => <img key={p} src={`/images/${p}.jpg`} alt="" loading="lazy" />)}
-        </div>
+        <Gallery photos={r.photos} alt={`${r.name} — vegetarian restaurant in Sahibabad`} />
 
         <div className="rhead">
           <div className="rtop">

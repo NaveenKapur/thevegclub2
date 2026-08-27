@@ -1,7 +1,11 @@
+'use client'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { SITE } from '../lib/config'
 
 export default function ActionBar() {
+  const path = usePathname()
+  if (path?.startsWith('/lp/')) return null   // the landing page has its own sticky bar
   const wa = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hello, I would like to book a table through thevegclub.com')}`
   return (
     <div className="actionbar">

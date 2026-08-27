@@ -8,14 +8,17 @@ import DealBox from '../components/DealBox'
 import { JsonLd, organization, website, offerList, faq } from '../lib/schema'
 import { SITE } from '../lib/config'
 import { RACK, money } from '../lib/pricing'
+import { pageMeta } from '../lib/seo'
 
 export const revalidate = 300
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,799 | Veg Club',
   description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. Book for ₹50.',
-  alternates: { canonical: '/' },
-}
+  path: '/',
+  og: 'home',
+  imageAlt: 'The Veg Club — vegetarian buffet deals in Ghaziabad from ₹1,399 a person',
+})
 
 const FAQS = [
   { q: 'What does a vegetarian buffet cost in Ghaziabad?',
@@ -62,11 +65,11 @@ export default async function Home() {
             <Link className="btn" href="/deals/buffet" style={{ textDecoration: 'none' }}>See buffet deals</Link>
             <Link className="btn ghost" href="/restaurants" style={{ textDecoration: 'none' }}>Restaurants</Link>
           </div>
-          <div className="steps">
-            <span className="step"><b>1</b>Choose a deal</span>
-            <span className="step"><b>2</b>Pay ₹{SITE.fee}</span>
-            <span className="step"><b>3</b>Coupon on WhatsApp</span>
-            <span className="step"><b>4</b>Show it at the table</span>
+          <div className="stepchips">
+            <span className="stepchip"><b>1</b>Choose a deal</span>
+            <span className="stepchip"><b>2</b>Pay ₹{SITE.fee}</span>
+            <span className="stepchip"><b>3</b>Coupon on WhatsApp</span>
+            <span className="stepchip"><b>4</b>Show it at the table</span>
           </div>
         </div>
         <DealBox from={1399} />
