@@ -8,13 +8,13 @@ import { JsonLd, offerList, breadcrumbs } from '../../../lib/schema'
 export const revalidate = 300
 
 const META = {
-  'lunch':          ['Lunch Deals in Ghaziabad & Indirapuram — From ₹1,399', 'Vegetarian lunch offers in Sahibabad. Buffet ₹1,700 per guest, or 1+1 at ₹2,800 for two, Monday to Friday. Book your table for ₹50.'],
-  'dinner':         ['Dinner Deals in Delhi NCR — 1+1 and 20% Off Veg', 'Vegetarian dinner offers in Sahibabad: buffet 1+1 at ₹3,300 for two, or 20% off à la carte across three restaurants. Reserve for ₹50.'],
-  'breakfast':      ['Breakfast Deals in Ghaziabad — Veg Buffet ₹1,399', 'All-day vegetarian breakfast buffet in Sahibabad at ₹1,399 per guest, all inclusive. Weekend 1+1 at ₹2,600 for two. Reserve for ₹50.'],
+  'lunch':          ['Veg Lunch Deals in Ghaziabad — 1+1 ₹2,799 for Two', 'Vegetarian lunch buffet at 64/6, Sahibabad. One guest ₹1,699, or 1+1 at ₹2,799 for two against a ₹5,598 counter price. Book for ₹50.'],
+  'dinner':         ['Veg Dinner Deals in Ghaziabad — 1+1 ₹3,299 for Two', 'Vegetarian dinner buffet at 64/6, Sahibabad. One guest ₹1,899, or 1+1 at ₹3,299 for two against a ₹6,598 counter price. Book for ₹50.'],
+  'breakfast':      ['Breakfast Deals in Ghaziabad — Veg Buffet ₹1,399', 'Vegetarian breakfast buffet at 64/6, Sahibabad. ₹1,399 per guest all inclusive against a ₹2,599 counter price — 46% off. Reserve for ₹50.'],
   'buffet':         ['Veg Buffet Deals in Ghaziabad — From ₹1,399 a Head', 'Vegetarian buffet offers in Sahibabad. Breakfast ₹1,399, lunch ₹1,700, dinner ₹1,900 per guest, all inclusive. Up to 50% off with 1+1.'],
-  '1-plus-1':       ['1+1 Restaurant Deals in Delhi NCR — Two Eat for One', 'Buy one get one free at vegetarian restaurants in Sahibabad. Dinner 1+1 ₹3,300 for two, lunch ₹2,800. Half the counter price. Book for ₹50.'],
-  '50-percent-off': ['50% Off Restaurant Deals in Delhi NCR — Pure Veg', 'Half-price vegetarian dining in Ghaziabad. Weekday 1+1 buffets save a full 50% on the counter rate. Verified prices, no membership needed.'],
-  'buffet':         ['Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,800', 'Vegetarian buffet coupons at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,800 for two, dinner 1+1 ₹3,300. Buffets from ₹1,399 per guest.'],
+  '1-plus-1':       ['1+1 Buffet Deals in Ghaziabad — Two Eat for One', 'Buy one get one free at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two, dinner 1+1 ₹3,299 — half the counter price. Book for ₹50.'],
+  '50-percent-off': ['50% Off Veg Buffet Deals in Ghaziabad — 1+1', 'Half-price vegetarian buffets at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 and dinner 1+1 ₹3,299 — a full 50% off the counter rate.'],
+  'buffet':         ['Veg Buffet Deals in Ghaziabad — From ₹1,399 a Head', 'Vegetarian buffet at 64/6, Sahibabad. Breakfast ₹1,399, lunch ₹1,699, dinner ₹1,899 per guest. Weekday 1+1 from ₹2,799 for two. Book for ₹50.'],
 }
 
 export function generateStaticParams() {
