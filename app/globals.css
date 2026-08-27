@@ -525,3 +525,73 @@ a.pill:hover{border-color:var(--brass);color:var(--brass)}
 }
 .dealbox .atline b{color:var(--brass-2);font-weight:700}
 .dealbox .dealpts{margin-top:16px}
+
+/* ══ SCROLL REVEAL ═══════════════════════════════════════════════════ */
+.rv{transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.3,1)}
+.rv.pre{opacity:0;transform:translateY(20px)}
+.rv.pre.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv,.rv.pre{opacity:1!important;transform:none!important}}
+
+/* card lift on hover */
+.card.lift{transition:transform .28s cubic-bezier(.2,.7,.3,1),box-shadow .28s ease,border-color .2s ease}
+.card.lift:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(22,33,27,.14)}
+.card .ph img{transition:transform .7s cubic-bezier(.2,.7,.3,1)}
+.card.lift:hover .ph img{transform:scale(1.05)}
+
+/* ══ OCCASION TILES ══════════════════════════════════════════════════ */
+.occs{display:grid;gap:14px}
+@media(min-width:640px){.occs{grid-template-columns:1fr 1fr}}
+.occ{
+  display:flex;gap:0;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;height:100%;
+  transition:border-color .22s ease,transform .28s cubic-bezier(.2,.7,.3,1)
+}
+.occ:hover{border-color:var(--brass);transform:translateY(-3px)}
+.occpic{flex:0 0 116px;position:relative;overflow:hidden}
+.occpic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform .7s cubic-bezier(.2,.7,.3,1)}
+.occ:hover .occpic img{transform:scale(1.07)}
+.occbody{padding:16px 18px;min-width:0}
+.occbody h3{font-family:var(--f-display);font-size:17.5px;font-weight:500;margin:0 0 6px}
+.occbody p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.5}
+.occgo{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--brass);text-decoration:none}
+.occgo:hover{color:var(--ink)}
+@media(max-width:420px){.occpic{flex-basis:92px}.occbody{padding:14px}}
+
+/* ══ COMPARISON TABLE ════════════════════════════════════════════════ */
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.cmp{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+.cmp th,.cmp td{padding:13px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.cmp thead th{background:var(--panel-2);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.cmp tbody td:first-child{color:var(--ink-3);white-space:nowrap}
+.cmp td.hi{color:var(--ink);font-weight:700}
+.cmp tr:last-child td{border-bottom:0}
+
+/* ══ LONGFORM SEO COPY ═══════════════════════════════════════════════ */
+.longform{max-width:68ch}
+.longform h3{font-family:var(--f-display);font-size:19px;font-weight:500;margin:28px 0 8px}
+.longform p{color:var(--ink-2);font-size:15.5px;line-height:1.65;margin:0}
+
+/* ══ CLOSING CTA ═════════════════════════════════════════════════════ */
+.endcta{
+  background:var(--forest);color:var(--on-forest);border-radius:var(--r);
+  padding:38px 26px;text-align:center;position:relative;overflow:hidden
+}
+.endcta::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(90% 130% at 50% -20%,rgba(196,146,47,.26),transparent 60%)}
+.endcta > *{position:relative}
+.endcta h2{color:var(--on-forest);font-size:clamp(22px,4vw,32px);letter-spacing:-.02em}
+.endcta p{color:#B9C8BD;margin:12px 0 22px;font-size:15px}
+.endcta .ctarow{max-width:440px;margin-left:auto;margin-right:auto}
+
+/* page eyebrow */
+.intro .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--brass);font-weight:700;margin:0 0 12px}
+
+/* The deal box is the main draw — it must show on phones, where the old
+   .herocard rule hid it below 900px. */
+.dealbox{display:block!important;margin-top:20px}
+@media(min-width:900px){.dealbox{margin-top:0}}

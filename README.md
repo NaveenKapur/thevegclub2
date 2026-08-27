@@ -135,6 +135,23 @@ on every relevant hub, sitemap entry and schema block with no code change.
 - CRM revalidate → live CRM deals replace the fallback within seconds.
 - No `192.168.*` address anywhere in the rendered HTML.
 
+## Pricing — one file
+
+`lib/pricing.js` holds EVERY price on the site: counter (rack) rates, deal rates,
+service windows and the bill calculator. Cards, hubs, the booking bill, the landing
+pages and the JSON-LD all derive from it. **Never type a price anywhere else.**
+
+Counter rates (per guest): breakfast ₹2,599 · lunch ₹2,799 · dinner ₹3,299.
+Deals: breakfast ₹1,399 · lunch ₹1,699 · dinner ₹1,899 for one guest;
+weekday 1+1 ₹2,799 lunch / ₹3,299 dinner; weekend pairs ₹3,199 lunch / ₹3,599 dinner.
+
+The bill pairs guests into 1+1 rates and charges any odd guest the single rate, then
+checks the all-singles total and keeps whichever is cheaper — a guest can never be
+worse off. Children up to 5 years are complimentary and are not counted at all.
+
+**Service times are shown, never selected** — picking 7:30 am for a lunch booking was
+the mistake people made. The booking sends the session's start time automatically.
+
 ## Launch scope (August 2026)
 
 Only **64/6** sells coupons. 3B's and Tatva show "coming soon". **Skydeck** (formerly
