@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
         <footer>
           <div className="wrap">
             <b>The Veg Club</b> — vegetarian restaurant deals in Delhi NCR<br />
-            64/6 · 3B’s · Tatva · Little Italy · Sahibabad, Ghaziabad
+            64/6 · 3B’s · Tatva · Skydeck · Sahibabad, Ghaziabad
           </div>
         </footer>
         <ActionBar />

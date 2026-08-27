@@ -27,13 +27,26 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
   const [done, setDone] = useState(null)
   const [failed, setFailed] = useState('')
 
-  const outletDeals = live.filter(d => !outlet || d.outlet === outlet)
+  // Which day type has the guest chosen? Weekday and weekend rates differ,
+  // so only the matching set is ever offered.
+  const dayType = date ? ([0,6].includes(new Date(date + 'T12:00').getDay()) ? 'weekend' : 'weekday') : null
+  const outletDeals = live
+    .filter(d => !outlet || d.outlet === outlet)
+    .filter(d => !dayType || d.days === 'all' || d.days === dayType)
   const deal = live.find(d => d.slug === dealSlug && (!outlet || d.outlet === outlet)) || null
   const minGuests = deal?.minGuests || 1
   const slots = deal ? SLOTS[deal.session] || [] : []
 
   useEffect(() => { if (adults < minGuests) setAdults(minGuests) }, [minGuests])   // eslint-disable-line
   useEffect(() => { setTime('') }, [dealSlug])
+
+  // Changing the date can invalidate the chosen deal — drop it rather than
+  // letting a weekday rate be booked on a Saturday.
+  useEffect(() => {
+    if (!dealSlug || !dayType) return
+    const d = live.find(x => x.slug === dealSlug)
+    if (d && d.days !== 'all' && d.days !== dayType) setDealSlug('')
+  }, [date])   // eslint-disable-line
 
   const today = iso(new Date())
   const quick = [
@@ -119,8 +132,8 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
       ) : null}
 
       <div className={'fgroup' + (bad.outlet ? ' bad' : '')}>
-        <span className="lbl">Restaurant <span className="req">*</span></span>
-        <select value={outlet} onChange={e => { setOutlet(e.target.value); setDealSlug('') }}>
+        <label className="lbl" htmlFor="outlet">Restaurant <span className="req">*</span></label>
+        <select id="outlet" value={outlet} onChange={e => { setOutlet(e.target.value); setDealSlug('') }}>
           <option value="">Choose a restaurant</option>
           {restaurants.map(r => <option key={r.slug} value={r.slug}>{r.name}</option>)}
         </select>
@@ -128,8 +141,8 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
       </div>
 
       <div className={'fgroup' + (bad.deal ? ' bad' : '')}>
-        <span className="lbl">Deal <span className="req">*</span></span>
-        <select value={dealSlug} onChange={e => setDealSlug(e.target.value)}>
+        <label className="lbl" htmlFor="offer">Deal <span className="req">*</span></label>
+        <select id="offer" value={dealSlug} onChange={e => setDealSlug(e.target.value)}>
           <option value="">{outlet ? 'Choose a deal' : 'Choose a restaurant first'}</option>
           {outletDeals.map(d => (
             <option key={d.slug + d.outlet} value={d.slug}>
@@ -141,14 +154,19 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
       </div>
 
       <div className={'fgroup' + (bad.date ? ' bad' : '')}>
-        <span className="lbl">When are you coming? <span className="req">*</span></span>
+        <label className="lbl" htmlFor="date">When are you coming? <span className="req">*</span></label>
         <div className="chipsrow" style={{ marginBottom: 10 }}>
           {quick.map(q => (
             <button key={q.label} type="button" className="pill" aria-pressed={date === q.v}
               onClick={() => setDate(q.v)}>{q.label}</button>
           ))}
         </div>
-        <input type="date" min={today} value={date} onChange={e => setDate(e.target.value)} />
+        <input type="date" id="date" min={today} value={date} onChange={e => setDate(e.target.value)} />
+        {dayType === 'weekend'
+          ? <p className="hint">Weekend rates apply — Saturday and Sunday coupons differ from weekdays.</p>
+          : dayType === 'weekday'
+            ? <p className="hint">Weekday rates apply — Monday to Friday.</p>
+            : null}
         <p className="err">Please pick a date.</p>
       </div>
 
@@ -189,15 +207,15 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
       </div>
 
       <div className={'fgroup' + (bad.name ? ' bad' : '')}>
-        <span className="lbl">Your name <span className="req">*</span></span>
-        <input type="text" autoComplete="name" placeholder="Name for the booking"
+        <label className="lbl" htmlFor="gname">Your name <span className="req">*</span></label>
+        <input type="text" id="gname" autoComplete="name" placeholder="Name for the booking"
           value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
         <p className="err">Please tell us your name.</p>
       </div>
 
       <div className={'fgroup' + (bad.mobile ? ' bad' : '')}>
-        <span className="lbl">WhatsApp number <span className="req">*</span></span>
-        <input type="tel" inputMode="numeric" autoComplete="tel" placeholder="10-digit mobile number"
+        <label className="lbl" htmlFor="gmobile">WhatsApp number <span className="req">*</span></label>
+        <input type="tel" id="gmobile" inputMode="numeric" autoComplete="tel" placeholder="10-digit mobile number"
           value={form.mobile} onChange={e => setForm({ ...form, mobile: e.target.value })} />
         <p className="hint">Your coupon and payment link come here.</p>
         <p className="err">Enter a valid 10-digit Indian mobile number.</p>
@@ -212,8 +230,8 @@ export default function BookingForm({ deals, restaurants, preselect, fee }) {
           <p className="err">That email does not look right.</p>
         </div>
         <div className="fgroup">
-          <span className="lbl">Occasion</span>
-          <select value={form.occasion} onChange={e => setForm({ ...form, occasion: e.target.value })}>
+          <label className="lbl" htmlFor="occasion">Occasion</label>
+          <select id="occasion" value={form.occasion} onChange={e => setForm({ ...form, occasion: e.target.value })}>
             <option value="">Not a special occasion</option>
             <option>Birthday</option><option>Anniversary</option>
             <option>Family get-together</option><option>Kitty party</option><option>Business meal</option>

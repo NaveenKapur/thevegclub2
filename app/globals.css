@@ -298,3 +298,59 @@ a.pill:hover{border-color:var(--brass);color:var(--brass)}
 
 /* restaurant gallery: one lead photo, strip beneath (matches the prototype) */
 .gal a{cursor:default}
+
+/* ── FAQ accordion ─────────────────────────────────────────────────── */
+.faq{border-top:1px solid var(--line);margin-top:8px}
+.faqitem{border-bottom:1px solid var(--line)}
+.faqq{
+  width:100%;display:flex;align-items:center;gap:16px;text-align:left;
+  background:none;border:0;cursor:pointer;padding:18px 2px;
+  font-family:var(--f-display);font-size:17px;font-weight:500;color:var(--ink);line-height:1.35
+}
+.faqq:hover{color:var(--brass)}
+.faqq svg{
+  margin-left:auto;flex:0 0 auto;width:20px;height:20px;fill:none;
+  stroke:var(--brass);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .28s cubic-bezier(.2,.7,.3,1)
+}
+.faqitem.open .faqq svg{transform:rotate(180deg)}
+.faqa{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.2,.7,.3,1)}
+.faqitem.open .faqa{grid-template-rows:1fr}
+.faqa > p{overflow:hidden;margin:0;color:var(--ink-2);font-size:15px;
+  padding-right:36px;transition:padding .32s ease}
+.faqitem.open .faqa > p{padding-bottom:20px}
+
+/* ── restaurant status ─────────────────────────────────────────────── */
+.card.soon{opacity:.82}
+.card.soon .ph img{filter:grayscale(.55) brightness(.82)}
+.status{
+  position:absolute;left:10px;bottom:10px;font-size:11px;font-weight:700;
+  letter-spacing:.06em;padding:4px 9px;border-radius:4px;
+  background:var(--panel);color:var(--ink-2);border:1px solid var(--line)
+}
+.status.enq{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
+
+/* ── weekend block on the 64/6 page ────────────────────────────────── */
+.weekend{border:1px dashed var(--line);border-radius:var(--r);padding:18px;margin-top:10px}
+.weekend h3{font-size:18px;margin-bottom:4px}
+.weekend .sub{margin-top:4px}
+
+/* ── big buffet feature ────────────────────────────────────────────── */
+.feature{
+  background:var(--forest);color:var(--on-forest);border-radius:var(--r);
+  overflow:hidden;display:grid;gap:0;margin-top:8px
+}
+@media(min-width:860px){.feature{grid-template-columns:1.05fr .95fr;align-items:stretch}}
+.feature .pic{min-height:220px;position:relative}
+.feature .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.feature .body{padding:26px 24px}
+@media(min-width:860px){.feature .body{padding:34px 32px}}
+.feature .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brass-2);margin-bottom:12px}
+.feature h2{font-size:clamp(24px,3.6vw,34px);color:var(--on-forest);letter-spacing:-.02em}
+.feature p{color:#B9C8BD;font-size:15px;margin:12px 0 0;max-width:44ch}
+.feature dl{margin:22px 0 0;padding-top:16px;border-top:1px solid rgba(237,241,233,.2);
+  display:grid;grid-template-columns:1fr auto;gap:9px 16px;font-size:14.5px}
+.feature dt{color:#9DB0A2}
+.feature dd{margin:0;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:var(--on-forest)}
+.feature .ctarow{margin-top:22px}

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getDeals } from '../../../lib/crm'
 import { RESTAURANTS } from '../../../data/restaurants'
-import { HUBS } from '../../../data/deals'
+import { HUBS, weekdayDeals } from '../../../data/deals'
 import DealCard from '../../../components/DealCard'
 import { JsonLd, offerList, breadcrumbs } from '../../../lib/schema'
 
@@ -14,7 +14,7 @@ const META = {
   'buffet':         ['Veg Buffet Deals in Ghaziabad — From ₹1,399 a Head', 'Vegetarian buffet offers in Sahibabad. Breakfast ₹1,399, lunch ₹1,700, dinner ₹1,900 per guest, all inclusive. Up to 50% off with 1+1.'],
   '1-plus-1':       ['1+1 Restaurant Deals in Delhi NCR — Two Eat for One', 'Buy one get one free at vegetarian restaurants in Sahibabad. Dinner 1+1 ₹3,300 for two, lunch ₹2,800. Half the counter price. Book for ₹50.'],
   '50-percent-off': ['50% Off Restaurant Deals in Delhi NCR — Pure Veg', 'Half-price vegetarian dining in Ghaziabad. Weekday 1+1 buffets save a full 50% on the counter rate. Verified prices, no membership needed.'],
-  'sunday-brunch':  ['Sunday Brunch in Ghaziabad — Veg Buffet 1+1 ₹2,600', 'Weekend vegetarian brunch in Sahibabad. Two guests for ₹2,600 all inclusive — 50% off the counter rate. Saturdays and Sundays. Book for ₹50.'],
+  'buffet':         ['Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,800', 'Vegetarian buffet coupons at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,800 for two, dinner 1+1 ₹3,300. Buffets from ₹1,399 per guest.'],
 }
 
 export function generateStaticParams() {
@@ -33,7 +33,7 @@ export default async function Hub({ params }) {
 
   const { deals } = await getDeals()
   const bySlug = Object.fromEntries(RESTAURANTS.map(r => [r.slug, r]))
-  const matched = deals.filter(d => d.status === 'live').filter(hub.filter)
+  const matched = weekdayDeals(deals).filter(hub.filter)
   const [title, description] = META[params.slug] || [hub.title, '']
 
   return (

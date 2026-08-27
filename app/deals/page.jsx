@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { getDeals } from '../../lib/crm'
 import { RESTAURANTS } from '../../data/restaurants'
-import { HUBS } from '../../data/deals'
+import { HUBS, weekdayDeals } from '../../data/deals'
 import DealCard from '../../components/DealCard'
 import { JsonLd, offerList, breadcrumbs } from '../../lib/schema'
 
@@ -16,7 +16,7 @@ export const metadata = {
 export default async function Deals() {
   const { deals } = await getDeals()
   const bySlug = Object.fromEntries(RESTAURANTS.map(r => [r.slug, r]))
-  const live = deals.filter(d => d.status === 'live')
+  const live = weekdayDeals(deals)
 
   return (
     <main>
@@ -24,8 +24,8 @@ export default async function Deals() {
       <JsonLd data={breadcrumbs([{ name: 'Home', href: '/' }, { name: 'Deals', href: '/deals' }])} />
 
       <div className="wrap intro">
-        <h1>Vegetarian restaurant deals in Delhi NCR</h1>
-        <p>Every live offer across our restaurants in Sahibabad and Ghaziabad. All prices include taxes. The ₹50 reservation fee is charged separately.</p>
+        <h1>Veg buffet coupons in Ghaziabad</h1>
+        <p>Every weekday coupon at 64/6, Sahibabad. All prices include taxes; the ₹50 reservation fee is charged separately. Weekend rates differ and are listed on the <a href="/restaurants/64-6">64/6 page</a>.</p>
         <div className="chipsrow" style={{ marginTop: 16 }}>
           {Object.entries(HUBS).map(([slug, h]) => (
             <Link key={slug} className="pill" href={`/deals/${slug}`} style={{ textDecoration: 'none' }}>

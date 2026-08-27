@@ -17,11 +17,15 @@ export default function Restaurants() {
       <div className="wrap sec">
         <div className="cards">
           {RESTAURANTS.map(r => (
-            <Link key={r.slug} href={`/restaurants/${r.slug}`} className="card" style={{ textDecoration: 'none' }}>
-              <div className="ph"><img src={`/images/${r.photos[0]}.jpg`} alt={r.name} loading="lazy" /></div>
+            <Link key={r.slug} href={`/restaurants/${r.slug}`} className={'card' + (r.status === 'coming_soon' ? ' soon' : '')} style={{ textDecoration: 'none' }}>
+              <div className="ph">
+                <img src={`/images/${r.photos[0]}.jpg`} alt={r.name} loading="lazy" />
+                {r.status === 'coming_soon' ? <span className="status">COMING SOON</span> : null}
+                {r.status === 'enquiry' ? <span className="status enq">GROUPS OF 50+</span> : null}
+              </div>
               <div className="body">
                 <h3>{r.name}</h3>
-                <div className="meta">{r.kind} · {r.costForTwo}</div>
+                <div className="meta">{r.kind}{r.status === 'live' ? ' · ' + r.costForTwo : ''}</div>
                 <div className="go">View photos &amp; deals →</div>
               </div>
             </Link>

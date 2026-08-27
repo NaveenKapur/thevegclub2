@@ -1,5 +1,6 @@
 import { getDeals } from '../../lib/crm'
-import { RESTAURANTS } from '../../data/restaurants'
+import { LIVE } from '../../data/restaurants'
+import { weekdayDeals, weekendDeals } from '../../data/deals'
 import BookingForm from '../../components/BookingForm'
 import { SITE } from '../../lib/config'
 
@@ -24,8 +25,8 @@ export default async function Book({ searchParams }) {
           </h1>
           <div className="slip" style={{ marginTop: 18 }}>
             <BookingForm
-              deals={deals}
-              restaurants={RESTAURANTS}
+              deals={[...weekdayDeals(deals), ...weekendDeals(deals)]}
+              restaurants={LIVE()}
               preselect={sp?.deal || ''}
               fee={SITE.fee}
             />

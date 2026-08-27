@@ -135,6 +135,32 @@ on every relevant hub, sitemap entry and schema block with no code change.
 - CRM revalidate → live CRM deals replace the fallback within seconds.
 - No `192.168.*` address anywhere in the rendered HTML.
 
+## Launch scope (August 2026)
+
+Only **64/6** sells coupons. 3B's and Tatva show "coming soon". **Skydeck** (formerly
+Little Italy) is enquiry-only — the whole terrace, minimum 50 guests, quoted per event,
+never a ₹50 coupon.
+
+**Weekday and weekend rates differ and are never shown together.**
+`weekdayDeals()` drives the home page, /deals and every hub. `weekendDeals()` appears in
+its own section on `/restaurants/64-6` only. In the booking form, choosing a date filters
+the deal list to that day type — pick a Saturday and the weekday 1+1 disappears.
+
+## Preview without installing anything
+
+`preview/landing-page-preview.html` — open in a browser to see the ad landing page exactly
+as it will look. Self-contained, no server needed. The live route is `/lp/lunch-1-1`.
+
+## URLs
+
+| URL | Indexed |
+|---|---|
+| `/` home | yes |
+| `/deals` and `/deals/buffet`, `/lunch`, `/dinner`, `/breakfast`, `/1-plus-1`, `/50-percent-off` | yes |
+| `/restaurants` and `/restaurants/64-6`, `/3bs`, `/tatva`, `/skydeck` | yes |
+| `/book` | yes |
+| `/lp/lunch-1-1`, `/lp/dinner-1-1`, `/lp/buffet` — **ad landing pages** | **no** |
+
 ## Still to do
 
 1. **Confirm the real API paths on pct211 and pct103** — the defaults in `.env.example`
@@ -144,6 +170,6 @@ on every relevant hub, sitemap entry and schema block with no code change.
 3. Coupon page `/c/[code]` and staff screen `/redeem`.
 4. Occasion pages, area pages, editorial — see the SEO blueprint.
 5. Social cards in `public/og/` — one 1200×630 PNG per URL.
-6. Little Italy's deal is marked `provisional` — confirm 20% and change `status` to `live`.
+6. Open 3B's and Tatva: set `status: 'live'` in `data/restaurants.js` and add their deals to `data/deals.js`.
 7. Vegan wording: every page says **vegetarian**. Do not change to "vegan" until each
    kitchen has confirmed a dairy-free list. See the SEO blueprint, section 02.
