@@ -2,7 +2,7 @@ import './globals.css'
 import { SITE } from '../lib/config'
 import ActionBar from '../components/ActionBar'
 import SiteHeader from '../components/SiteHeader'
-import { TopStrip, SiteFooter } from '../components/SiteChrome'
+import { SiteFooter } from '../components/SiteChrome'
 
 /*  Site-wide defaults. Every page overrides title, description and og:image
  *  with its own — see lib/seo.js. These are the fallbacks, so a page that
@@ -47,7 +47,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en-IN">
       <body>
-        <TopStrip />
         <SiteHeader />
         {children}
         <SiteFooter />

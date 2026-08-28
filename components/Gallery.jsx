@@ -1,13 +1,22 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-/*  Restaurant gallery.
+/*  Restaurant header gallery.
  *
- *  Click a thumbnail and it becomes the main image; click the main image and
- *  it opens full-screen. Keyboard-operable throughout — the thumbnails are
- *  real buttons, and the lightbox closes on Escape and traps nothing.
+ *  Layout, on a wide screen:
+ *
+ *      ┌──────────────────────────┬──────────────┐
+ *      │        main photo        │  deals box   │   ← same height, side by side
+ *      ├──────────────────────────┴──────────────┤
+ *      │  ▢  ▢  ▢  ▢  ▢  ▢                       │   ← thumbnails, full width
+ *      └─────────────────────────────────────────┘
+ *
+ *  On a phone the three parts simply stack: photo, thumbnails, deals box.
+ *
+ *  Every thumbnail is a real <button> that swaps the main photo, and the main
+ *  photo opens full screen. Keyboard: arrows move, Escape closes.
  */
-export default function Gallery({ photos, alt }) {
+export default function Gallery({ photos, alt, aside = null }) {
   const [active, setActive] = useState(0)
   const [zoom, setZoom] = useState(false)
 
@@ -21,14 +30,20 @@ export default function Gallery({ photos, alt }) {
     document.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev }
+    /*  The fixed action bar would otherwise sit on the photo. */
+    document.body.classList.add('lbopen')
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+      document.body.classList.remove('lbopen')
+    }
   }, [zoom, photos.length])
 
   if (!photos?.length) return null
 
   return (
     <>
-      <div className="gal">
+      <div className={'gwrap' + (aside ? '' : ' nobox')}>
         <button type="button" className="galmain" onClick={() => setZoom(true)}
           aria-label="View this photo full screen">
           <img src={`/images/${photos[active]}.jpg`} alt={alt} />
@@ -36,21 +51,23 @@ export default function Gallery({ photos, alt }) {
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l4.5 4.5M11 8v6M8 11h6"/></svg>
           </span>
         </button>
-      </div>
 
-      {photos.length > 1 ? (
-        <div className="galmore" role="group" aria-label="More photos">
-          {photos.map((p, i) => (
-            <button key={p} type="button"
-              className={'galthumb' + (i === active ? ' on' : '')}
-              aria-current={i === active}
-              aria-label={`Show photo ${i + 1} of ${photos.length}`}
-              onClick={() => setActive(i)}>
-              <img src={`/images/${p}.jpg`} alt="" loading="lazy" />
-            </button>
-          ))}
-        </div>
-      ) : null}
+        {aside ? <div className="gaside">{aside}</div> : null}
+
+        {photos.length > 1 ? (
+          <div className="galmore" role="group" aria-label="More photos">
+            {photos.map((p, i) => (
+              <button key={p} type="button"
+                className={'galthumb' + (i === active ? ' on' : '')}
+                aria-current={i === active}
+                aria-label={`Show photo ${i + 1} of ${photos.length}`}
+                onClick={() => setActive(i)}>
+                <img src={`/images/${p}.jpg`} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
 
       {zoom ? (
         <div className="lb" role="dialog" aria-modal="true" aria-label="Photo viewer"

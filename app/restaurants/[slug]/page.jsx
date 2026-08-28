@@ -71,7 +71,13 @@ export default async function RestaurantPage({ params }) {
 
       <div className="wrap">
         <Link className="back" href="/restaurants" style={{ display: 'inline-block', textDecoration: 'none' }}>← All restaurants</Link>
-        <Gallery photos={r.photos} alt={`${r.name} — vegetarian restaurant in Sahibabad`} />
+        {/*  The deals box sits beside the photo, not under the heading: it is the
+          *  first thing a visitor should see, and it makes the header square up. */}
+        <Gallery
+          photos={r.photos}
+          alt={`${r.name} — vegetarian restaurant in Sahibabad`}
+          aside={<DealBox from={1399} compact at={live ? null : '64/6'} />}
+        />
 
         <div className="rhead">
           <div className="rtop">
@@ -99,7 +105,6 @@ export default async function RestaurantPage({ params }) {
                target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>Ask on WhatsApp</a>
           </div>
             </div>
-            <DealBox from={1399} compact at={live ? null : '64/6'} />
           </div>
         </div>
 

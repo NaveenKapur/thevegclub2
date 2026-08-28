@@ -24,6 +24,20 @@ export const website = () => ({
   url: SITE.url,
 })
 
+/*  One place maps a meal to real clock hours — the site, the schema and the
+    booking form must never disagree about when a restaurant serves. */
+const HOURS = {
+  breakfast: ['07:00', '10:30'],
+  lunch: ['12:30', '15:30'],
+  dinner: ['19:00', '23:00'],
+}
+const hoursFor = (session) => ({
+  '@type': 'OpeningHoursSpecification',
+  dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+  opens: HOURS[session]?.[0],
+  closes: HOURS[session]?.[1],
+})
+
 export const restaurant = (r) => ({
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
@@ -34,6 +48,9 @@ export const restaurant = (r) => ({
   telephone: '+' + SITE.phone,
   address: addr(r),
   acceptsReservations: 'True',
+  /*  Service hours come from the restaurant's own sessions, so a dinner-only
+      outlet is never advertised to Google or an AI assistant as open for lunch. */
+  ...(r.sessions?.length ? { openingHoursSpecification: r.sessions.map(hoursFor) } : {}),
   // Only claim vegan once a kitchen has confirmed a dairy-free list.
   ...(r.veganOptions === 'verified'
     ? { suitableForDiet: ['https://schema.org/VegetarianDiet', 'https://schema.org/VeganDiet'] }

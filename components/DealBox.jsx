@@ -22,7 +22,7 @@ export default function DealBox({ from = 1399, compact = false, at = null }) {
 
       <ul className="dealpts">
         <li><b>Up to 50% off</b> the counter price</li>
-        <li>Breakfast, lunch &amp; dinner buffets</li>
+        <li>{at ? <>Breakfast, lunch &amp; dinner buffets at <b>{at}</b></> : <>Breakfast, lunch &amp; dinner buffets</>}</li>
         <li>Children up to 5 years <b>free</b></li>
       </ul>
 

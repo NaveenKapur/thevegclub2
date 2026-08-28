@@ -88,17 +88,6 @@ button{font-family:inherit}
 .card .go{margin-top:12px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
 
 /* ---------- restaurant page ---------- */
-.gal{display:grid;gap:6px;grid-template-columns:1fr;margin-top:8px;border-radius:var(--r);overflow:hidden}
-@media(min-width:720px){
-  .gal{grid-template-columns:2fr 1fr 1fr;grid-template-rows:160px 160px}
-  .gal a:first-child{grid-row:1/3;grid-column:1}
-}
-.gal a{display:block;background:var(--panel-2);overflow:hidden;border:0;padding:0;cursor:zoom-in}
-.gal a img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
-@media(min-width:720px){.gal a img{aspect-ratio:auto;height:100%}}
-.galmore{margin-top:10px;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.galmore img{height:76px;width:auto;border-radius:6px;flex:0 0 auto;cursor:zoom-in}
-
 .rhead{padding-top:6px}
 .rhead h1{font-size:clamp(24px,6vw,36px);letter-spacing:-.02em}
 .rhead .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -136,6 +125,9 @@ button{font-family:inherit}
 @media(min-width:560px){.btn{width:auto;min-width:180px}}
 
 /* ---------- global action bar ---------- */
+/*  Hidden while a photo is open full screen — nothing floats over the picture. */
+body.lbopen .actionbar,
+body.lbopen .hdr{display:none}
 .actionbar{
   position:fixed;left:0;right:0;bottom:0;z-index:80;
   background:var(--panel);border-top:1px solid var(--line);
@@ -279,10 +271,8 @@ details.more[open] summary::before{content:"– "}
 .tc li{margin-bottom:6px}
 .tc a{color:var(--brass);font-weight:700}
 
-/* lightbox */
-.lb{position:fixed;inset:0;background:rgba(8,14,11,.94);z-index:200;display:grid;place-items:center;padding:16px}
-.lb img{max-width:100%;max-height:86vh;border-radius:6px}
-.lb button{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.14);color:#fff;border:0;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer}
+/*  Lightbox styles live in the RESTAURANT HEADER block further down —
+    an earlier duplicate here was overriding the arrow positions. */
 
 footer{background:var(--forest);color:#9DB0A2;padding:26px 0;font-size:12.5px;margin-top:20px}
 footer b{color:var(--on-forest)}
@@ -517,12 +507,10 @@ aside.dealbox .eyebrow{
   .counterline b{display:inline}
 }
 
-/* restaurant page: name on the left, deal box on the right at width */
+/* restaurant page: the deal box now lives beside the photo (see .gwrap),
+   so the text block below it simply runs full width. */
 .rtop{display:block}
-@media(min-width:960px){
-  .rtop{display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start}
-  .rtop .rtopmain{min-width:0}
-}
+.rtop .rtopmain{min-width:0}
 .dealbox.compact{display:block;margin-top:18px}
 @media(min-width:960px){.dealbox.compact{margin-top:6px}}
 .dealbox.compact .bignum{font-size:clamp(44px,7vw,58px)}
@@ -661,7 +649,32 @@ aside.dealbox .eyebrow{
   background:#FFFFFF;border-color:#FFFFFF;color:#241703
 }
 
-/* ══ RESTAURANT GALLERY ══════════════════════════════════════════════ */
+/* ══ RESTAURANT HEADER: photo + deal box + thumbnail strip ═══════════ */
+
+/*  Phone: photo, thumbnails, deal box — stacked, in that order.
+    Desktop: photo and deal box share one row at exactly the same height,
+    and the thumbnails run the full width underneath both. */
+.gwrap{display:grid;gap:12px;margin-top:8px;grid-template-columns:1fr;
+  grid-template-areas:"main" "thumbs" "aside"}
+.gwrap .galmain{grid-area:main}
+.gwrap .gaside{grid-area:aside}
+.gwrap .galmore{grid-area:thumbs}
+
+@media(min-width:900px){
+  .gwrap{
+    grid-template-columns:minmax(0,1.42fr) minmax(300px,.92fr);
+    grid-template-areas:"main aside" "thumbs thumbs";
+    /*  One fixed height for the row, so a square photo and a wide photo give
+        the same header — and the deal box never floats in empty space. */
+    grid-template-rows:clamp(340px,30vw,430px) auto;
+    gap:16px;align-items:stretch
+  }
+  .gwrap .gaside{min-width:0;display:flex}
+  .gwrap .gaside > *{width:100%;margin-top:0}
+  /* The photo takes its height from the deal box beside it, never the reverse. */
+  .gwrap .galmain{height:100%;min-height:0}
+  .gwrap .galmain img{height:100%;aspect-ratio:auto;object-fit:cover}
+}
 .gal{margin-top:8px;border-radius:var(--r);overflow:hidden}
 .galmain{
   display:block;width:100%;padding:0;border:0;background:var(--panel-2);
@@ -677,14 +690,19 @@ aside.dealbox .eyebrow{
 .galzoom svg{width:19px;height:19px;fill:none;stroke:#EDF1E9;stroke-width:2;stroke-linecap:round}
 .galmain:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 
-.galmore{margin-top:10px;display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;
-  -webkit-overflow-scrolling:touch}
+.galmore{margin-top:0;display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .galthumb{
   flex:0 0 auto;padding:0;border:2px solid transparent;background:none;
   border-radius:7px;overflow:hidden;cursor:pointer;line-height:0;
   transition:border-color .2s ease,opacity .2s ease;opacity:.72
 }
-.galthumb img{height:74px;width:auto;object-fit:cover;display:block}
+.galthumb img{height:74px;width:110px;object-fit:cover;display:block}
+@media(min-width:900px){
+  /* Equal tiles that fill the row rather than a ragged scroller. */
+  .galmore{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;overflow:visible}
+  .galthumb img{height:96px;width:100%}
+}
 .galthumb:hover{opacity:1;border-color:var(--line)}
 .galthumb.on{opacity:1;border-color:var(--brass)}
 .galthumb:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
