@@ -5,6 +5,7 @@ import { weekdayDeals } from '../data/deals'
 import DealCard, { saving } from '../components/DealCard'
 import Faq from '../components/Faq'
 import DealBox from '../components/DealBox'
+import { LovedBand } from '../components/Rating'
 import { JsonLd, organization, website, offerList, faq } from '../lib/schema'
 import { SITE } from '../lib/config'
 import { RACK, money } from '../lib/pricing'
@@ -14,7 +15,7 @@ export const revalidate = 300
 
 export const metadata = pageMeta({
   title: 'Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,799 | Veg Club',
-  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. Book for ₹50.',
+  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. ₹50 a person cover charge, redeemable.',
   path: '/',
   og: 'home',
   imageAlt: 'The Veg Club — vegetarian buffet deals in Ghaziabad from ₹1,399 a person',
@@ -31,10 +32,10 @@ const FAQS = [
     a: 'The bill pairs guests into 1+1 deals and charges any remaining guest the single rate — whichever combination is cheapest for you. Three at weekday lunch is ₹4,498; five at weekday dinner is ₹8,497.' },
   { q: 'Do children pay?',
     a: 'Children up to 5 years are complimentary and are not added to the bill at all. Children above 5 are counted as guests at the deal rate.' },
-  { q: 'What is the ₹50 reservation fee?',
-    a: 'It holds your table and locks the deal price. It is not refundable and is not adjusted against your restaurant bill.' },
-  { q: 'Are these deals available on Zomato or Dineout?',
-    a: 'No. These prices are available only on thevegclub.com.' },
+  { q: 'What is the ₹50?',
+    a: '₹50 per person cover charge, which is redeemable — it comes off your restaurant bill. It holds your table and locks the deal price.' },
+  { q: 'Can I get these prices anywhere else?',
+    a: 'No. These coupon prices are available only on thevegclub.com — they are direct rates from the restaurant, with no platform commission built in.' },
   { q: 'Do the restaurants cook without onion and garlic?',
     a: 'Sattvic dishes without onion or garlic can be prepared on request. Mention it when you book so the kitchen is ready.' },
 ]
@@ -106,6 +107,14 @@ export default async function Home() {
             )
           })}
         </div>
+      </div>
+
+      {/* ── what guests actually rate these restaurants ── */}
+      <div className="wrap sec">
+        <h2>Best rated food and service in Sahibabad</h2>
+        <p className="sub">We only sell deals at restaurants guests already rate highly. These are the live
+          Google ratings for the kitchens behind every coupon on this site — not our own scores.</p>
+        <LovedBand />
       </div>
 
       {/* ── the buffet feature ── */}

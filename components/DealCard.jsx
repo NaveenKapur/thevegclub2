@@ -27,7 +27,7 @@ export default function DealCard({ deal, restaurant }) {
       {/* Rack comparison — this is what makes the deal feel like a deal. */}
       <div className="rack" style={{ gridColumn: '1 / -1' }}>
         <span>Counter price <s>{money(deal.rackTotal)}</s></span>
-        <b>You save {money(deal.saving)}</b>
+        <b>You save {money(deal.saving)}{off ? <em> ({off}% Discount)</em> : null}</b>
       </div>
 
       <div className="cta">

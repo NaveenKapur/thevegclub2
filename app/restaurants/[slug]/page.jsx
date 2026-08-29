@@ -7,6 +7,7 @@ import DealCard from '../../../components/DealCard'
 import Faq from '../../../components/Faq'
 import DealBox from '../../../components/DealBox'
 import Gallery from '../../../components/Gallery'
+import Rating from '../../../components/Rating'
 import { JsonLd, restaurant as restaurantSchema, offer, breadcrumbs } from '../../../lib/schema'
 import { SITE, phoneDisplay } from '../../../lib/config'
 import { pageMeta } from '../../../lib/seo'
@@ -18,10 +19,10 @@ export function generateStaticParams() {
 }
 
 const META = {
-  '64-6': ['64/6 Buffet Sahibabad — Lunch 1+1 ₹2,799 for Two', 'Vegetarian buffet at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two, dinner 1+1 ₹3,299. Weekend rates listed separately. Book for ₹50.'],
+  '64-6': ['64/6 Buffet Sahibabad — Lunch 1+1 ₹2,799 for Two', 'Vegetarian buffet at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two, dinner 1+1 ₹3,299. Weekend rates listed separately. ₹50 a person cover charge, redeemable.'],
   '3bs': ["3B's Poolside Restaurant, Sahibabad — Opening Soon", 'Open-air poolside vegetarian dining at Sahibabad. North Indian, Chinese, Italian and Thai. Coupons opening shortly.'],
   'tatva': ['Tatva Fine Dining, Sahibabad — Opening Soon', 'Indoor à la carte vegetarian fine dining with a full bar at Sahibabad. Coupons opening shortly.'],
-  'skydeck': ['Skydeck Sahibabad — Terrace Venue for 50+ Guests', 'The open terrace at Sahibabad, hired whole for gatherings of 50 or more. Birthdays, anniversaries, corporate evenings. Quoted per event.'],
+  'skydeck': ['Skydeck — Private Party Lounge, Sahibabad', 'Skydeck is the private party lounge at Sahibabad, hired whole for gatherings of 50 or more. Birthdays, anniversaries, corporate evenings. Quoted per event.'],
 }
 
 export function generateMetadata({ params }) {
@@ -42,12 +43,12 @@ export function generateMetadata({ params }) {
 const TERMS = (r) => [
   { q: 'How do I use the coupon?', a: 'Carry your voucher — a digital copy on your phone is fine. Prior reservation is mandatory.' },
   { q: 'How many guests can I bring?', a: r.status === 'enquiry'
-      ? `Skydeck is hired as a whole terrace, minimum ${r.minGroup} guests, up to ${r.maxGuests}.`
+      ? `Skydeck is a private party lounge, hired whole — minimum ${r.minGroup} guests, up to ${r.maxGuests}.`
       : `Maximum ${r.maxGuests} guests per reservation under a coupon. Larger groups are quoted separately.` },
   { q: 'Can it be combined with another offer?', a: 'No. A coupon cannot be combined with any other discount or promotion.' },
   { q: 'What about children?', a: 'Children up to 5 years are complimentary and are not added to the bill at all. Children above 5 are counted as guests at the deal rate.' },
   { q: 'Can the kitchen cook without onion and garlic?', a: 'Yes — sattvic dishes without onion or garlic are prepared on request. Mention it when booking so the kitchen is ready.' },
-  { q: 'Is the ₹50 refundable?', a: 'No. The ₹50 reservation fee is non-refundable and is not adjusted against your restaurant bill. It holds the table and locks the price.' },
+  { q: 'What is the ₹50?', a: '₹50 per person cover charge, which is redeemable — it comes off your restaurant bill. It holds the table and locks the deal price.' },
 ]
 
 export default async function RestaurantPage({ params }) {
@@ -83,6 +84,8 @@ export default async function RestaurantPage({ params }) {
           <div className="rtop">
             <div className="rtopmain">
               <h1>{r.name}</h1>
+          {/*  Real Google rating, attributed to the listing it comes from. */}
+          <Rating slug={r.slug} />
           <div className="chips">
             {r.status === 'coming_soon' ? <span className="chip" style={{ color: 'var(--brass)', fontWeight: 700 }}>Coupons coming soon</span> : null}
             {enquiry ? <span className="chip" style={{ color: 'var(--brass)', fontWeight: 700 }}>Minimum {r.minGroup} guests</span> : null}
@@ -144,8 +147,8 @@ export default async function RestaurantPage({ params }) {
         {/* ── enquiry-only venue ── */}
         {enquiry ? (
           <div className="sec">
-            <h2>Hiring Skydeck</h2>
-            <p className="sub">Skydeck is not sold as a ₹{SITE.fee} coupon. The terrace is taken as a whole for gatherings of {r.minGroup} or more, and priced per event — menu, bar, duration and headcount all change the quote.</p>
+            <h2>Hiring Skydeck — the private party lounge</h2>
+            <p className="sub">Skydeck is not sold as a ₹{SITE.fee} coupon. The private party lounge is taken as a whole for gatherings of {r.minGroup} or more, and priced per event — menu, bar, duration and headcount all change the quote.</p>
             <div className="tc">
               <h3>Tell us four things and we will quote</h3>
               <ul>

@@ -8,8 +8,9 @@ const iso = d => d.toISOString().slice(0, 10)
 export default function BookingCart({ outletName = '64/6' }) {
   const [guests, setGuests] = useState(2)
   const [kids, setKids] = useState(0)
-  const [meal, setMeal] = useState('lunch')
+  const [meal, setMeal] = useState(outletName === 'Tatva' ? 'lunch' : 'breakfast')
   const [date, setDate] = useState('')
+  const [time, setTime] = useState('')
   const [form, setForm] = useState({ name: '', mobile: '', requests: '' })
   const [bad, setBad] = useState({})
   const [busy, setBusy] = useState(false)
@@ -23,7 +24,7 @@ export default function BookingCart({ outletName = '64/6' }) {
   const quick = [
     { label: 'Today', v: today },
     { label: 'Tomorrow', v: iso(new Date(Date.now() + 864e5)) },
-    { label: 'Saturday', v: (() => { const n = new Date(); n.setDate(n.getDate() + ((6 - n.getDay() + 7) % 7 || 7)); return iso(n) })() },
+
   ]
 
   async function submit(e) {
@@ -31,6 +32,7 @@ export default function BookingCart({ outletName = '64/6' }) {
     setFailed('')
     const b = {}
     if (!date) b.date = 1
+    if (outletName === 'Tatva' && !time) b.time = 1
     if (form.name.trim().length < 2) b.name = 1
     const mob = form.mobile.replace(/\D/g, '').slice(-10)
     if (!/^[6-9]\d{9}$/.test(mob)) b.mobile = 1
@@ -51,11 +53,11 @@ export default function BookingCart({ outletName = '64/6' }) {
           offer: `${SERVICE[meal].label} · ${guests} guest${guests > 1 ? 's' : ''}${weekend ? ' (weekend rate)' : ''}`,
           offerSlug: `${meal}-${weekend ? 'weekend' : 'weekday'}-${guests}`,
           session: meal,
-          date, time: SERVICE[meal].start + ':00',
+          date, time: outletName === 'Tatva' ? time + ':00' : SERVICE[meal].start + ':00',
           service_window: SERVICE[meal].window,
           adults: guests, children: kids,
-          quoted_total_inr: bill.total,
-          rack_total_inr: bill.rack,
+          quoted_total_inr: outletName === 'Tatva' ? 0 : bill.total,
+          rack_total_inr: outletName === 'Tatva' ? 0 : bill.rack,
           saving_inr: bill.saving,
           name: form.name.trim(), mobile: mob,
           requests: form.requests.trim() || null,
@@ -89,10 +91,10 @@ export default function BookingCart({ outletName = '64/6' }) {
       <div className="cstep">
         <div className="cnum">1</div>
         <div className="cbody">
-          <h3>How many guests?</h3>
+          <h3>How many people?</h3>
           <div className="two">
             <div>
-              <label className="lbl" htmlFor="guests">Guests being charged</label>
+              <label className="lbl" htmlFor="guests">Adults</label>
               <div className="count">
                 <button type="button" onClick={() => setGuests(g => Math.max(1, g - 1))} aria-label="Fewer guests">−</button>
                 <output id="guests">{guests}</output>
@@ -100,7 +102,7 @@ export default function BookingCart({ outletName = '64/6' }) {
               </div>
             </div>
             <div>
-              <label className="lbl" htmlFor="kids">Children up to 5 years</label>
+              <label className="lbl" htmlFor="kids">Children (under 5)</label>
               <div className="count">
                 <button type="button" onClick={() => setKids(k => Math.max(0, k - 1))} aria-label="Fewer children">−</button>
                 <output id="kids">{kids}</output>
@@ -118,15 +120,15 @@ export default function BookingCart({ outletName = '64/6' }) {
         <div className="cbody">
           <h3>Which meal?</h3>
           <div className="meals">
-            {MEALS.map(m => (
-              <button key={m} type="button" className="mealbtn" aria-pressed={meal === m} onClick={() => setMeal(m)}>
+            {(outletName === 'Tatva' ? ['lunch', 'dinner'] : MEALS).map(m => (
+              <button key={m} type="button" className="mealbtn" aria-pressed={meal === m} onClick={() => { setMeal(m); setTime(''); }}>
                 <span className="mn">{SERVICE[m].label}</span>
                 <span className="mw">{SERVICE[m].window}</span>
-                <span className="mp">from {money(quote({ meal: m, guests, date }).perGuest)} a guest</span>
+                {outletName !== 'Tatva' && <span className="mp">from {money(quote({ meal: m, guests, date }).perGuest)} a guest</span>}
               </button>
             ))}
           </div>
-          <p className="hint">Service times are fixed — no need to pick a slot. Arrive any time within the window.</p>
+
         </div>
       </div>
 
@@ -153,12 +155,44 @@ export default function BookingCart({ outletName = '64/6' }) {
         </div>
       </div>
 
-      {/* ── THE BILL ── */}
-      <div className="bill">
-        <div className="billhead">
-          <span>{outletName} · {SERVICE[meal].label}</span>
-          <span>{weekend ? 'Weekend' : 'Weekday'} rate</span>
+      {/* 4 ── time (Tatva only) */}
+      {outletName === 'Tatva' && (
+        <div className={'cstep' + (bad.time ? ' bad' : '')}>
+          <div className="cnum">4</div>
+          <div className="cbody">
+            <h3>What time?</h3>
+            {meal === 'lunch' && (
+              <div className="chipsrow">
+                {['12:30', '13:00', '13:30', '14:00'].map(t => (
+                  <button key={t} type="button" className="pill" aria-pressed={time === t} onClick={() => setTime(t)}>
+                    {t === '12:30' ? '12:30 PM' : t === '13:00' ? '1:00 PM' : t === '13:30' ? '1:30 PM' : '2:00 PM'}
+                  </button>
+                ))}
+              </div>
+            )}
+            {meal === 'dinner' && (
+              <div className="chipsrow">
+                {['19:00', '19:30', '20:00', '20:30', '21:00'].map(t => (
+                  <button key={t} type="button" className="pill" aria-pressed={time === t} onClick={() => setTime(t)}>
+                    {t === '19:00' ? '7:00 PM' : t === '19:30' ? '7:30 PM' : t === '20:00' ? '8:00 PM' : t === '20:30' ? '8:30 PM' : '9:00 PM'}
+                  </button>
+                ))}
+              </div>
+            )}
+            <p className="err">Please pick a time slot.</p>
+          </div>
         </div>
+      )}
+
+      {/* ── THE BILL ── */}
+      {outletName !== 'Tatva' && (
+        <>
+          <h3 className="billtitle">Sample Bill</h3>
+          <div className="bill">
+            <div className="billhead">
+              <span>{outletName} · {SERVICE[meal].label}</span>
+              <span>{weekend ? 'Weekend' : 'Weekday'} rate</span>
+            </div>
 
         <div className="billrows">
           <div className="brow muted">
@@ -183,26 +217,51 @@ export default function BookingCart({ outletName = '64/6' }) {
 
         <div className="brow save">
           <span>You save</span>
-          <b>{money(bill.saving)} <em>({bill.savingPct}% off)</em></b>
+          <b>{money(bill.saving)} <em>({bill.savingPct}% Discount)</em></b>
         </div>
 
         <div className="brow subtotal">
-          <span>Pay at the restaurant</span>
+          <span>Your bill at the restaurant</span>
           <b>{money(bill.total)}</b>
         </div>
 
         <div className="brow due">
-          <span>Pay now to reserve</span>
+          <span>Cover charge now · {guests} × {money(bill.feePerGuest)}</span>
           <b>{money(bill.fee)}</b>
         </div>
       </div>
       <p className="hint billnote">
-        The {money(bill.fee)} holds your table and locks this price. Non-refundable, and not adjusted against your bill.
+        {money(bill.feePerGuest)} per person cover charge, which is <b>redeemable</b> — it comes off
+        your restaurant bill, leaving {money(bill.balance)} to pay at the table. It holds your table
+        and locks this price.
       </p>
+      </>
+      )}
+      
+      {outletName === 'Tatva' && (
+        <>
+          <h3 className="billtitle">Reservation</h3>
+          <div className="bill">
+            <div className="billhead">
+              <span>{outletName} · {SERVICE[meal].label}</span>
+            </div>
+            <div className="billrows">
+              <div className="brow due" style={{ margin: '-18px', padding: '14px 18px', borderRadius: 'var(--r)' }}>
+                <span>Cover charge now · {guests} × {money(bill.feePerGuest)}</span>
+                <b>{money(bill.fee)}</b>
+              </div>
+            </div>
+          </div>
+          <p className="hint billnote">
+            {money(bill.feePerGuest)} per person cover charge, which is <b>redeemable</b> — it comes off
+            your restaurant bill. It holds your table.
+          </p>
+        </>
+      )}
 
-      {/* 4 ── who */}
+      {/* 5 ── who */}
       <div className="cstep">
-        <div className="cnum">4</div>
+        <div className="cnum">{outletName === 'Tatva' ? 5 : 4}</div>
         <div className="cbody">
           <h3>Who is it for?</h3>
           <div className={'fgroup' + (bad.name ? ' bad' : '')}>

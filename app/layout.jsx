@@ -15,7 +15,7 @@ export const metadata = {
     template: '%s | The Veg Club',
   },
   description:
-    'Vegetarian buffet coupons at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Book for ₹50, coupon on WhatsApp.',
+    'Vegetarian buffet coupons at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. ₹50 a person cover charge, redeemable, coupon on WhatsApp.',
   applicationName: SITE.name,
   formatDetection: { telephone: true },
   openGraph: {

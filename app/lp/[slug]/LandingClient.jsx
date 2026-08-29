@@ -140,9 +140,7 @@ export default function LandingClient({ lp, gallery }) {
             </tbody>
           </table>
           <p className="lede rv" style={{ marginTop: 22 }}>
-            The ₹50 holds your table and locks this price. It is not refundable and is not adjusted
-            against your bill — on a saving of ₹{money(lp.was - lp.price - 50)}, that is the point at
-            which most people stop reading and just book.
+            ₹50 per person cover charge, redeemable against your restaurant bill.
           </p>
         </div>
       </section>
@@ -212,7 +210,7 @@ export default function LandingClient({ lp, gallery }) {
                 <button className="cta" type="submit" disabled={busy} style={{ width: '100%' }}>
                   {busy ? 'Sending…' : 'Grab my coupon — ₹50'}
                 </button>
-                <p className="note">Non-refundable. Not adjusted against your bill. Minimum 2 guests.</p>
+                <p className="note">₹50 per person cover charge, redeemable against your restaurant bill. Minimum 2 guests.</p>
               </form>
             )}
           </div>

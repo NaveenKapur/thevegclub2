@@ -72,7 +72,7 @@ export default function Landing({ params }) {
             <span>Pure vegetarian</span>
             <span>No onion no garlic on request</span>
             <span>Coupon on WhatsApp</span>
-            <span>Not on Zomato or Dineout</span>
+            <span>Only on thevegclub.com</span>
           </div>
         </div>
       </header>
@@ -82,7 +82,7 @@ export default function Landing({ params }) {
       <footer>
         <div className="wrap">
           <b>{lp.outlet} at Country Inn &amp; Suites by Radisson, Sahibabad, Ghaziabad</b> · +91 99881 19793
-          <p>{lp.terms} Children under 5 complimentary; 5 and above at the adult deal rate. The ₹50 reservation fee is non-refundable and is not adjusted against the restaurant bill.</p>
+          <p>{lp.terms} Children under 5 complimentary; 5 and above at the adult deal rate. ₹50 per person cover charge, redeemable against your restaurant bill.</p>
         </div>
       </footer>
     </div>

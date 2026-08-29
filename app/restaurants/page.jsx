@@ -4,13 +4,14 @@ import { RACK, money } from '../../lib/pricing'
 import DealBox from '../../components/DealBox'
 import Faq from '../../components/Faq'
 import Reveal from '../../components/Reveal'
+import { LovedBand } from '../../components/Rating'
 import { JsonLd, faq, breadcrumbs, restaurant as rSchema } from '../../lib/schema'
 import { SITE } from '../../lib/config'
 import { pageMeta } from '../../lib/seo'
 
 export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Sahibabad & Ghaziabad',
-  description: 'Pure vegetarian restaurant deals in Sahibabad, Ghaziabad and Indirapuram. Buffet coupons from ₹1,399 a head, 1+1 dinners at half the counter price. Book for ₹50.',
+  description: 'Pure vegetarian restaurant deals in Sahibabad, Ghaziabad and Indirapuram. Buffet coupons from ₹1,399 a head, 1+1 dinners at half the counter price. ₹50 a person cover charge, redeemable.',
   path: '/restaurants',
   og: 'restaurants',
   imageAlt: 'Vegetarian restaurant deals in Sahibabad and Ghaziabad from ₹1,399 a person',
@@ -18,8 +19,8 @@ export const metadata = pageMeta({
 
 const OCCASIONS = [
   { t: 'Kitty party deals', d: 'Weekday lunch buffet for a group, reserved seating, up to 20 guests. The 1+1 rate applies to every pair.', img: 's_hall' },
-  { t: 'Birthday party deals', d: 'A private corner, cake arrangement on request and the full buffet. From 10 guests upward.', img: 'romance' },
-  { t: 'Anniversary dinner deals', d: 'Dinner 1+1 at ₹3,299 for two on weekdays. Poolside and terrace tables available.', img: 'night' },
+  { t: 'Birthday party deals', d: 'A private corner, cake arrangement on request and the full buffet. From 10 guests upward.', img: 's_atrium' },
+  { t: 'Anniversary dinner deals', d: 'Dinner 1+1 at ₹3,299 for two on weekdays. at 64/6 — two dinners for the price of one.', img: 's_live' },
   { t: 'Family get-together deals', d: 'Sunday or weekday, breakfast through dinner. Children up to 5 years eat free.', img: 's_long' },
 ]
 
@@ -123,22 +124,32 @@ export default function Restaurants() {
         </div>
       </div>
 
-      {/* ── honest comparison ── */}
+      {/* ── ratings ── */}
       <div className="wrap sec">
-        <Reveal><h2>Why book direct instead of an aggregator</h2></Reveal>
-        <Reveal><p className="sub">Zomato, Swiggy Dineout, EazyDiner and Magicpin all list restaurants in Ghaziabad. Here is the honest difference.</p></Reveal>
+        <Reveal><h2>Rated by guests, not by us</h2></Reveal>
+        <Reveal><p className="sub">Every restaurant we list is an established kitchen with a public
+          Google rating. Here is what those ratings actually say today.</p></Reveal>
+        <Reveal><LovedBand /></Reveal>
+      </div>
+
+      {/* ── why book direct ── */}
+      <div className="wrap sec">
+        <Reveal><h2>Why book direct</h2></Reveal>
+        <Reveal><p className="sub">Get up to 50% off the counter price — and the price you see is the
+          price the restaurant honours.</p></Reveal>
         <Reveal>
           <div className="scrollx">
             <table className="cmp">
               <thead>
-                <tr><th></th><th>Booking here</th><th>Through an aggregator</th></tr>
+                <tr><th></th><th>Booking here</th><th>Walking in</th></tr>
               </thead>
               <tbody>
-                <tr><td>The price you see</td><td className="hi">An exact rupee figure — {money(2799)} for two</td><td>Usually "up to 20% off"</td></tr>
-                <tr><td>Who sets it</td><td className="hi">The restaurant</td><td>The platform, after commission</td></tr>
-                <tr><td>What you pay upfront</td><td className="hi">{money(50)} to hold the table</td><td>Varies by platform</td></tr>
-                <tr><td>Where the coupon lives</td><td className="hi">WhatsApp, with your booking reference</td><td>Inside an app you must open</td></tr>
-                <tr><td>These particular rates</td><td className="hi">Only on thevegclub.com</td><td>Not listed</td></tr>
+                <tr><td>The price you pay</td><td className="hi">An exact rupee figure — {money(2799)} for two</td><td>Counter price, {money(RACK.lunch * 2)} for two</td></tr>
+                <tr><td>Who sets it</td><td className="hi">The restaurant, direct</td><td>The restaurant</td></tr>
+                <tr><td>Discount</td><td className="hi">Up to 50% off the counter price</td><td>None</td></tr>
+                <tr><td>What you pay upfront</td><td className="hi">{money(50)} a person, redeemable against your bill</td><td>Nothing</td></tr>
+                <tr><td>Where the coupon lives</td><td className="hi">WhatsApp, with your booking reference</td><td>—</td></tr>
+                <tr><td>Is a table held?</td><td className="hi">Yes</td><td>Subject to availability</td></tr>
               </tbody>
             </table>
           </div>
@@ -174,7 +185,7 @@ export default function Restaurants() {
               A coupon booking holds up to twenty guests. The bill pairs guests into 1+1 rates and
               charges any odd guest the single rate, so a table of eight pays four pair rates and a
               table of five pays two pairs plus one. Children up to five years are complimentary and
-              are not counted on the bill at all. For gatherings above fifty, Skydeck — the open
+              are not counted on the bill at all. For gatherings above fifty, Skydeck — the private party lounge, an open
               terrace — is hired whole and quoted per event rather than sold as a coupon.
             </p>
           </Reveal>
@@ -191,10 +202,10 @@ export default function Restaurants() {
           <Reveal>
             <h3>How the ₹50 works</h3>
             <p>
-              The reservation fee holds your table and locks the coupon price. It is not refundable
-              and is not adjusted against your restaurant bill — on a weekday dinner for two that is
-              ₹50 spent to save {money(3299)}. Your coupon arrives on WhatsApp with a booking
-              reference; show it at the table and the deal price is applied to your bill.
+              ₹50 per person cover charge, which is redeemable — it comes off your restaurant bill,
+              so it is not an extra cost. It holds your table and locks the coupon price. Your coupon
+              arrives on WhatsApp with a booking reference; show it at the table and the deal price is
+              applied to your bill — up to 50% off the counter price.
             </p>
           </Reveal>
         </div>

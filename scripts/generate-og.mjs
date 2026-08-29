@@ -92,7 +92,7 @@ const html = (c) => `<!doctype html><meta charset="utf-8">
     <h1>${c.title}</h1>
     <div class="price">${c.price}</div>
   </div>
-  <div class="foot">thevegclub.com · <b>not on Zomato or Dineout</b></div>
+  <div class="foot">thevegclub.com · <b>up to 50% off the counter price</b></div>
 </div>`
 
 const browser = await chromium.launch({

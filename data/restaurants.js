@@ -36,7 +36,7 @@ export const RESTAURANTS = [
   },
   {
     slug: 'tatva', name: 'Tatva', status: 'coming_soon',
-    kind: 'Dinner · fine dining',
+    kind: 'Lunch & Dinner · fine dining',
     supplier: 'Country Inn & Suites by Radisson, Sahibabad',
     cuisines: ['North Indian','Asian','Chinese','Continental','Italian','Mexican','Thai','Pizza','Desserts'],
     costForTwo: '₹2,600 for two',
@@ -46,12 +46,13 @@ export const RESTAURANTS = [
     facilities: ['Indoor','Full bar','Romantic','Valet parking','Family friendly'],
     veganOptions: 'pending', noOnionNoGarlic: 'on request',
     area: 'Sahibabad', lat: null, lng: null,
-    about: 'Rooted in the philosophy of purity, balance and authentic flavours — a thoughtfully curated à la carte menu inspired by Indian culinary heritage and global influences. Dinner service only — Tatva does not open for breakfast or lunch.',
+    img: 't_dining',
+    about: 'Rooted in the philosophy of purity, balance and authentic flavours — a thoughtfully curated à la carte menu inspired by Indian culinary heritage and global influences.',
     photos: ['t_hall','t_barroom','t_bar','t_long','t_sofas','t_barclose','t_barrels'],
   },
   {
     slug: 'skydeck', name: 'Skydeck', status: 'enquiry',
-    kind: 'Terrace · large gatherings',
+    kind: 'Private party lounge',
     supplier: 'Country Inn & Suites by Radisson, Sahibabad',
     cuisines: ['Italian','North Indian','Continental','Pizza','Pasta','Desserts'],
     costForTwo: 'Quoted per event',
@@ -60,7 +61,7 @@ export const RESTAURANTS = [
     facilities: ['Open terrace','Dance floor','Full bar','Valet parking','Live music'],
     veganOptions: 'pending', noOnionNoGarlic: 'on request',
     area: 'Sahibabad', lat: null, lng: null,
-    about: 'Skydeck is the open terrace, taken as a whole for large gatherings — birthdays, anniversaries, corporate evenings and receptions. Minimum 50 guests. Pricing is quoted per event, not sold as a coupon.',
+    about: 'Skydeck is the private party lounge — an open terrace taken as a whole for large gatherings — birthdays, anniversaries, corporate evenings and receptions. Minimum 50 guests. Pricing is quoted per event, not sold as a coupon.',
     photos: ['li_terrace','li_wall','li_wide','li_upper','li_dessert'],
   },
 ]

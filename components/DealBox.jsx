@@ -26,11 +26,11 @@ export default function DealBox({ from = 1399, compact = false, at = null }) {
         <li>Children up to 5 years <b>free</b></li>
       </ul>
 
-      <Link className="btn" href="/book" style={{ textDecoration: 'none' }}>
+      <Link className="btn" href={`/book${at === 'Tatva' ? '?r=tatva' : ''}`} style={{ textDecoration: 'none' }}>
         Book from {money(from)}
       </Link>
       <p className="finep">
-        Just {money(RESERVATION_FEE)} to reserve — non-refundable, and not adjusted against your bill.
+        Just {money(RESERVATION_FEE)} per person cover charge to book — redeemable against your restaurant bill.
       </p>
     </aside>
   )
