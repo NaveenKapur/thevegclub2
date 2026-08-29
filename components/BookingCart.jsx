@@ -4,12 +4,12 @@ import { quote, money, isWeekend, SERVICE, RACK, RESERVATION_FEE } from '../lib/
 
 const MEALS = ['breakfast', 'lunch', 'dinner']
 
-/*  Bookable slots per meal. Breakfast has no slots — guests arrive any
-    time inside the service window. */
+/*  Bookable slots per meal. One list, so the picker, the validation and
+    the time sent to the CRM can never disagree. */
 const SLOTS = {
-  breakfast: [],
-  lunch:  [['12:30','12:30 PM'], ['13:00','1:00 PM'], ['13:30','1:30 PM'], ['14:00','2:00 PM']],
-  dinner: [['19:00','7:00 PM'], ['19:30','7:30 PM'], ['20:00','8:00 PM'], ['20:30','8:30 PM'], ['21:00','9:00 PM']],
+  breakfast: [['07:00','7:00 AM'], ['08:00','8:00 AM'], ['09:00','9:00 AM']],
+  lunch:     [['12:30','12:30 PM'], ['13:00','1:00 PM'], ['13:30','1:30 PM'], ['14:00','2:00 PM']],
+  dinner:    [['19:00','7:00 PM'], ['19:30','7:30 PM'], ['20:00','8:00 PM'], ['20:30','8:30 PM'], ['21:00','9:00 PM']],
 }
 const iso = d => d.toISOString().slice(0, 10)
 
