@@ -3,12 +3,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { quote, money, isWeekend, SERVICE, RACK, RESERVATION_FEE } from '../lib/pricing'
 
 const MEALS = ['breakfast', 'lunch', 'dinner']
+
+/*  Bookable slots per meal. Breakfast has no slots — guests arrive any
+    time inside the service window. */
+const SLOTS = {
+  breakfast: [],
+  lunch:  [['12:30','12:30 PM'], ['13:00','1:00 PM'], ['13:30','1:30 PM'], ['14:00','2:00 PM']],
+  dinner: [['19:00','7:00 PM'], ['19:30','7:30 PM'], ['20:00','8:00 PM'], ['20:30','8:30 PM'], ['21:00','9:00 PM']],
+}
 const iso = d => d.toISOString().slice(0, 10)
 
 export default function BookingCart({ outletName = '64/6' }) {
   const [guests, setGuests] = useState(2)
   const [kids, setKids] = useState(0)
-  const [meal, setMeal] = useState(outletName === 'Tatva' ? 'lunch' : 'breakfast')
+  const [meal, setMeal] = useState(outletName === 'Tatva' ? 'dinner' : 'breakfast')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [form, setForm] = useState({ name: '', mobile: '', requests: '' })
@@ -32,7 +40,7 @@ export default function BookingCart({ outletName = '64/6' }) {
     setFailed('')
     const b = {}
     if (!date) b.date = 1
-    if (outletName === 'Tatva' && !time) b.time = 1
+    if (SLOTS[meal].length > 0 && !time) b.time = 1
     if (form.name.trim().length < 2) b.name = 1
     const mob = form.mobile.replace(/\D/g, '').slice(-10)
     if (!/^[6-9]\d{9}$/.test(mob)) b.mobile = 1
@@ -53,7 +61,7 @@ export default function BookingCart({ outletName = '64/6' }) {
           offer: `${SERVICE[meal].label} · ${guests} guest${guests > 1 ? 's' : ''}${weekend ? ' (weekend rate)' : ''}`,
           offerSlug: `${meal}-${weekend ? 'weekend' : 'weekday'}-${guests}`,
           session: meal,
-          date, time: outletName === 'Tatva' ? time + ':00' : SERVICE[meal].start + ':00',
+          date, time: (time || SERVICE[meal].start) + ':00',
           service_window: SERVICE[meal].window,
           adults: guests, children: kids,
           quoted_total_inr: outletName === 'Tatva' ? 0 : bill.total,
@@ -120,11 +128,10 @@ export default function BookingCart({ outletName = '64/6' }) {
         <div className="cbody">
           <h3>Which meal?</h3>
           <div className="meals">
-            {(outletName === 'Tatva' ? ['lunch', 'dinner'] : MEALS).map(m => (
+            {(outletName === 'Tatva' ? ['dinner'] : MEALS).map(m => (
               <button key={m} type="button" className="mealbtn" aria-pressed={meal === m} onClick={() => { setMeal(m); setTime(''); }}>
                 <span className="mn">{SERVICE[m].label}</span>
                 <span className="mw">{SERVICE[m].window}</span>
-                {outletName !== 'Tatva' && <span className="mp">from {money(quote({ meal: m, guests, date }).perGuest)} a guest</span>}
               </button>
             ))}
           </div>
@@ -155,30 +162,18 @@ export default function BookingCart({ outletName = '64/6' }) {
         </div>
       </div>
 
-      {/* 4 ── time (Tatva only) */}
-      {outletName === 'Tatva' && (
+      {/* 4 ── time slot */}
+      {SLOTS[meal].length > 0 && (
         <div className={'cstep' + (bad.time ? ' bad' : '')}>
           <div className="cnum">4</div>
           <div className="cbody">
-            <h3>What time?</h3>
-            {meal === 'lunch' && (
-              <div className="chipsrow">
-                {['12:30', '13:00', '13:30', '14:00'].map(t => (
-                  <button key={t} type="button" className="pill" aria-pressed={time === t} onClick={() => setTime(t)}>
-                    {t === '12:30' ? '12:30 PM' : t === '13:00' ? '1:00 PM' : t === '13:30' ? '1:30 PM' : '2:00 PM'}
-                  </button>
-                ))}
-              </div>
-            )}
-            {meal === 'dinner' && (
-              <div className="chipsrow">
-                {['19:00', '19:30', '20:00', '20:30', '21:00'].map(t => (
-                  <button key={t} type="button" className="pill" aria-pressed={time === t} onClick={() => setTime(t)}>
-                    {t === '19:00' ? '7:00 PM' : t === '19:30' ? '7:30 PM' : t === '20:00' ? '8:00 PM' : t === '20:30' ? '8:30 PM' : '9:00 PM'}
-                  </button>
-                ))}
-              </div>
-            )}
+            <h3>Pick a time slot</h3>
+            <div className="chipsrow">
+              {SLOTS[meal].map(([v, label]) => (
+                <button key={v} type="button" className="pill"
+                  aria-pressed={time === v} onClick={() => setTime(v)}>{label}</button>
+              ))}
+            </div>
             <p className="err">Please pick a time slot.</p>
           </div>
         </div>
@@ -261,7 +256,7 @@ export default function BookingCart({ outletName = '64/6' }) {
 
       {/* 5 ── who */}
       <div className="cstep">
-        <div className="cnum">{outletName === 'Tatva' ? 5 : 4}</div>
+        <div className="cnum">5</div>
         <div className="cbody">
           <h3>Who is it for?</h3>
           <div className={'fgroup' + (bad.name ? ' bad' : '')}>

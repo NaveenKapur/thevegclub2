@@ -16,7 +16,6 @@ export default function DealCard({ deal, restaurant }) {
       <div className="mt">
         <span>{restaurant?.name || deal.outlet}</span>
         <span>{deal.note}</span>
-        <span>{pair ? '2 guests' : 'Per guest'}</span>
       </div>
 
       <div className="pr">

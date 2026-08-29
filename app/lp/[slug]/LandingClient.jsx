@@ -135,7 +135,7 @@ export default function LandingClient({ lp, gallery }) {
               <tr><th>Two guests</th><th>You pay</th></tr>
               <tr><td>Walking in off the street</td><td>₹{money(lp.was)}</td></tr>
               <tr><td>This deal, booked online</td><td className="hi">₹{money(lp.price)}</td></tr>
-              <tr><td>Reservation fee</td><td>₹50</td></tr>
+              <tr><td>Cover charge (redeemable)</td><td>₹50 a person</td></tr>
               <tr><td><b>You keep</b></td><td className="hi">₹{money(lp.was - lp.price - 50)}</td></tr>
             </tbody>
           </table>

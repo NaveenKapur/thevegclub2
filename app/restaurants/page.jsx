@@ -20,7 +20,7 @@ export const metadata = pageMeta({
 const OCCASIONS = [
   { t: 'Kitty party deals', d: 'Weekday lunch buffet for a group, reserved seating, up to 20 guests. The 1+1 rate applies to every pair.', img: 's_hall' },
   { t: 'Birthday party deals', d: 'A private corner, cake arrangement on request and the full buffet. From 10 guests upward.', img: 's_atrium' },
-  { t: 'Anniversary dinner deals', d: 'Dinner 1+1 at ₹3,299 for two on weekdays. at 64/6 — two dinners for the price of one.', img: 's_live' },
+  { t: 'Anniversary dinner deals', d: 'Dinner 1+1 at ₹3,299 for two on weekdays at 64/6 — two dinners for the price of one.', img: 's_live' },
   { t: 'Family get-together deals', d: 'Sunday or weekday, breakfast through dinner. Children up to 5 years eat free.', img: 's_long' },
 ]
 
@@ -29,8 +29,8 @@ const FAQS = [
     a: 'The sharpest is the weekday 1+1 buffet at 64/6, Country Inn & Suites Sahibabad — two guests eat the full vegetarian buffet for ₹2,799 at lunch or ₹3,299 at dinner, against counter prices of ₹5,598 and ₹6,598. That is a 50% saving. A single guest pays ₹1,399 for breakfast, ₹1,699 for lunch or ₹1,899 for dinner.' },
   { q: 'Where can I find vegetarian restaurant deals in Ghaziabad and Indirapuram?',
     a: 'The Veg Club lists pure vegetarian coupons at Sahibabad, roughly ten minutes from Indirapuram, Vaishali and Vasundhara. Every deal is bookable online for a ₹50 reservation fee and the coupon arrives on WhatsApp.' },
-  { q: 'Are these hotel restaurant deals cheaper than aggregator offers?',
-    a: 'They are direct rates, so there is no aggregator commission built into the price. We publish the exact rupee amount you will pay rather than an "up to" percentage, and the price you see is the price the restaurant honours.' },
+  { q: 'Are these deals cheaper than booking any other way?',
+    a: 'They are direct rates from the restaurant, with no platform commission built into the price. We publish the exact rupee amount you will pay rather than an "up to" percentage, and the price you see is the price the restaurant honours.' },
   { q: 'Do you have kitty party or birthday party deals?',
     a: 'Yes. Group bookings up to 20 guests use the same buffet coupons — the 1+1 rate applies to each pair, so a table of eight pays four pair rates. Cake and seating arrangements are made on request when you book.' },
   { q: 'What is the cheapest buffet deal in Ghaziabad?',
