@@ -83,9 +83,10 @@ export default function BookingCart({ outletName = '64/6' }) {
       // it returned -- never a hardcoded provider URL -- so the day the real
       // HDFC page replaces the current one, nothing here needs changing.
       if (j.payUrl) { setTimeout(() => { window.location.href = j.payUrl }, 1200); return }
-      // Booking held but no payment link available: send the guest to the
-      // status page, where they can pay or check back.
-      if (j.reservationRef) setTimeout(() => { window.location.href = `/book/status/${encodeURIComponent(j.reservationRef)}` }, 1200)
+      // Table held but no payment link -- no gateway is configured yet. Do NOT
+      // send the guest to a payment page that cannot work; the booking is
+      // safely with the restaurant, so say exactly that and let them call.
+
     } catch {
       setBusy(false)
       setFailed('Network problem. Please try again, or call us and we will hold your table.')
@@ -108,7 +109,9 @@ export default function BookingCart({ outletName = '64/6' }) {
               ? done.chargeDescription
               : `${money(RESERVATION_FEE)} per paying guest, redeemable against your restaurant bill.`}
           </p>
-          <p>Taking you to the secure payment page…</p>
+          {done.payUrl
+            ? <p>Taking you to the secure payment page…</p>
+            : <p>Your table is held. The restaurant will call you shortly to confirm and take payment.</p>}
         </>
       )}
     </div>
