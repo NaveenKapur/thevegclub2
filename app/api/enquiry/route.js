@@ -85,7 +85,7 @@ export async function POST(req) {
     return NextResponse.json({
       ok: true,
       held: false,
-      message: 'We have your request and the restaurant will call you to confirm the table.',
+      message: 'We could not hold a table for that exact slot, so the restaurant will call you to confirm.',
     })
   }
 

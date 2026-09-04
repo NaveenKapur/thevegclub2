@@ -82,10 +82,16 @@ export default function BookingCart({ outletName = '64/6' }) {
       // The CRM decided the amount and issued the payment link. Follow whatever
       // it returned -- never a hardcoded provider URL -- so the day the real
       // HDFC page replaces the current one, nothing here needs changing.
-      if (j.payUrl) { setTimeout(() => { window.location.href = j.payUrl }, 1200); return }
-      // Table held but no payment link -- no gateway is configured yet. Do NOT
-      // send the guest to a payment page that cannot work; the booking is
-      // safely with the restaurant, so say exactly that and let them call.
+      // Normal flow: the CRM issued a payment link, so the guest goes straight
+      // there. No interim 'we will call you' step -- that message is for the
+      // fallback below only. Follow whatever the CRM returned, never a
+      // hardcoded provider URL, so the day the real bank page replaces the
+      // current one nothing here needs changing.
+      if (j.payUrl) { window.location.href = j.payUrl; return }
+      // Genuine fallback only: the table is held but the CRM issued no payment
+      // link (no gateway configured, or none available for this booking). Do
+      // NOT send the guest to a payment page that cannot work -- their booking
+      // is safely with the restaurant, so say exactly that and let them call.
 
     } catch {
       setBusy(false)
@@ -111,7 +117,7 @@ export default function BookingCart({ outletName = '64/6' }) {
           </p>
           {done.payUrl
             ? <p>Taking you to the secure payment page…</p>
-            : <p>Your table is held. The restaurant will call you shortly to confirm and take payment.</p>}
+            : <p>Online payment is not available for this booking, so the restaurant will call you shortly to confirm and take payment.</p>}
         </>
       )}
     </div>
