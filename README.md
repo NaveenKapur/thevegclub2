@@ -39,46 +39,73 @@ Without `CRM_BASE_URL`, deals come from `data/deals.js` and bookings return a cl
 
 ## The CRM contract
 
-### Website → CRM · `POST {CRM_BASE_URL}{CRM_ENQUIRY_PATH}`
+Live and proven, 04 Sep 2026. Full spec in the CRM repo:
+`docs/WEBSITE-BOOKING-CONTRACT.md`. Base: `https://crm.radissonveg.com`.
+
+**The CRM owns the reservation and the money.** This site never computes the
+amount it charges and never keeps a second copy of a booking.
+
+### Website → CRM · `POST /api/public/website-reservation-form`
 
 ```json
 {
-  "source": "thevegclub.com",
-  "booking_type": "Restaurant",
-  "outlet": "64/6",
-  "offer": "Dinner 1+1",
-  "offer_slug": "dinner-1-plus-1",
-  "occasion": null,
-  "requested_date": "2026-09-15",
-  "session": "dinner",
-  "time_slot": "20:00:00",
+  "category": "Restaurant Reservation",
+  "venue": "64/6 – The Buffet Destination",
   "adults": 2,
   "children": 1,
-  "total_pax": 3,
-  "guest_name": "Naveen Kapur",
-  "mobile": "+919988119793",
+  "countryCode": "+91",
+  "phone": "9988119793",
+  "whatsappOptIn": true,
+  "name": "Naveen Kapur",
   "email": "a@b.com",
-  "city": "Ghaziabad",
-  "city_area": "Indirapuram",
-  "special_requests": "No onion no garlic",
-  "reservation_fee_paise": 5000,
-  "fee_refundable": false,
-  "fee_adjustable": false,
-  "payment_status": "not_initiated",
-  "lead_source": "Website",
-  "attribution": { "utm_source": "google", "gclid": "abc123", "referrer": "", "device": "mobile" },
-  "idempotency_key": "tvc-1787747996-a1b2c3d4"
+  "reservationDate": "2026-09-15",
+  "session": "dinner",
+  "slotTime": "20:00"
 }
 ```
 
-**Expected reply** (any one of these key names works):
+`adults` are the **payable** guests; `children` are complimentary under-5s who
+count for table size but are **not** charged.
+
+**Reply**
 
 ```json
-{ "enquiry_no": "CIS-2026-004417", "payment_link": "https://pay…/xyz" }
+{
+  "reservationRef": "RVR-2026-000456",
+  "amountPaise": 10000,
+  "payableCovers": 2,
+  "chargeDescription": "₹50 per person × 2 guests — redeemable against your restaurant bill",
+  "payUrl": "https://…",
+  "duplicateSubmission": false,
+  "bookingUnavailableReason": null
+}
 ```
 
-`reference` / `enquiry_no` / `id` — the first present is shown to the guest.
-`payment_url` / `payment_link` — if present, the guest is redirected to it.
+₹50 per payable guest, and it is a **deposit that is redeemable against the
+restaurant bill** — never describe it as non-refundable or non-adjustable.
+
+`payUrl` may be `null`; handle that rather than assuming a link. Always follow
+the CRM's `payUrl` — never hardcode a payment-provider URL, so nothing here
+changes when the real HDFC page replaces the current one.
+
+### The rest of the journey
+
+| Purpose | Endpoint |
+|---|---|
+| Status (the only thing that confirms a booking) | `GET /api/reservations/by-ref/{ref}/status` |
+| Receipt | `GET /api/public/reservations/{ref}/receipt` |
+| Printable receipt | `GET /api/public/reservations/{ref}/receipt?format=html` |
+| Try again after a failed payment | `POST /api/public/reservations/{ref}/retry-payment` |
+
+`state` is one of `PENDING`, `CONFIRMED`, `AWAITING_CONFIRMATION`, `EXPIRED`,
+`CANCELLED`, `ARRIVED`, `COMPLETED`, `NO_SHOW`. A payment return URL in the
+address bar proves nothing — only this endpoint does. `AWAITING_CONFIRMATION`
+means we have the guest's money and a person is confirming the table; it must
+never be shown as a failure.
+
+Retry preserves the **same** `reservationRef` and issues a fresh payment
+attempt — it never creates a second booking.
+
 
 ### CRM → website · deals · `GET {CRM_BASE_URL}{CRM_DEALS_PATH}?status=live`
 

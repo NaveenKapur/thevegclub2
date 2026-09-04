@@ -19,7 +19,7 @@ export default function BookingCart({ outletName = '64/6' }) {
   const [meal, setMeal] = useState(outletName === 'Tatva' ? 'dinner' : 'breakfast')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
-  const [form, setForm] = useState({ name: '', mobile: '', requests: '' })
+  const [form, setForm] = useState({ name: '', mobile: '', email: '', requests: '' })
   const [bad, setBad] = useState({})
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState(null)
@@ -44,6 +44,8 @@ export default function BookingCart({ outletName = '64/6' }) {
     if (form.name.trim().length < 2) b.name = 1
     const mob = form.mobile.replace(/\D/g, '').slice(-10)
     if (!/^[6-9]\d{9}$/.test(mob)) b.mobile = 1
+    // Email stays OPTIONAL — only a value that was actually typed is checked.
+    if (form.email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(form.email.trim())) b.email = 1
     setBad(b)
     if (Object.keys(b).length) { document.querySelector('.bad')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return }
 
@@ -68,6 +70,7 @@ export default function BookingCart({ outletName = '64/6' }) {
           rack_total_inr: outletName === 'Tatva' ? 0 : bill.rack,
           saving_inr: bill.saving,
           name: form.name.trim(), mobile: mob,
+          email: form.email.trim() || null,
           requests: form.requests.trim() || null,
           attribution,
           idempotencyKey: `tvc-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -76,7 +79,13 @@ export default function BookingCart({ outletName = '64/6' }) {
       const j = await res.json().catch(() => ({}))
       if (!j.ok) { setBusy(false); setFailed(j.message || 'We could not save your booking. Please call us and we will hold your table.'); return }
       setDone(j)
-      if (j.paymentUrl) setTimeout(() => { window.location.href = j.paymentUrl }, 1400)
+      // The CRM decided the amount and issued the payment link. Follow whatever
+      // it returned -- never a hardcoded provider URL -- so the day the real
+      // HDFC page replaces the current one, nothing here needs changing.
+      if (j.payUrl) { setTimeout(() => { window.location.href = j.payUrl }, 1200); return }
+      // Booking held but no payment link available: send the guest to the
+      // status page, where they can pay or check back.
+      if (j.reservationRef) setTimeout(() => { window.location.href = `/book/status/${encodeURIComponent(j.reservationRef)}` }, 1200)
     } catch {
       setBusy(false)
       setFailed('Network problem. Please try again, or call us and we will hold your table.')
@@ -85,10 +94,23 @@ export default function BookingCart({ outletName = '64/6' }) {
 
   if (done) return (
     <div className="done">
-      <h2>Table requested</h2>
-      <p>A payment link for the {money(RESERVATION_FEE)} reservation fee is on its way to your WhatsApp.</p>
-      {done.reference ? <div className="code">{done.reference}</div> : null}
-      <p>Once you pay, your coupon arrives on the same thread. Show it at the restaurant.</p>
+      {done.held === false ? (
+        <>
+          <h2>Request received</h2>
+          <p>{done.message || 'The restaurant will call you shortly to confirm your table.'}</p>
+        </>
+      ) : (
+        <>
+          <h2>Table held</h2>
+          {done.reservationRef ? <div className="code">{done.reservationRef}</div> : null}
+          <p>
+            {done.chargeDescription
+              ? done.chargeDescription
+              : `${money(RESERVATION_FEE)} per paying guest, redeemable against your restaurant bill.`}
+          </p>
+          <p>Taking you to the secure payment page…</p>
+        </>
+      )}
     </div>
   )
 
@@ -269,8 +291,14 @@ export default function BookingCart({ outletName = '64/6' }) {
             <label className="lbl" htmlFor="gmobile">WhatsApp number</label>
             <input type="tel" id="gmobile" inputMode="numeric" autoComplete="tel" placeholder="10-digit mobile number"
               value={form.mobile} onChange={e => setForm({ ...form, mobile: e.target.value })} />
-            <p className="hint">Your coupon and payment link come here.</p>
+            <p className="hint">Booking updates come here.</p>
             <p className="err">Enter a valid 10-digit Indian mobile number.</p>
+          </div>
+          <div className={'fgroup' + (bad.email ? ' bad' : '')}>
+            <label className="lbl" htmlFor="gemail">Email (optional)</label>
+            <input type="email" id="gemail" autoComplete="email" placeholder="For your reservation receipt"
+              value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+            <p className="err">Please check that email address.</p>
           </div>
           <details className="more">
             <summary>Anything we should know? (optional)</summary>

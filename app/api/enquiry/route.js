@@ -1,16 +1,19 @@
 /*  POST /api/enquiry
  *
- *  The ONLY route the browser calls. It runs on the Coolify host inside the
- *  LAN (192.168.1.102), so it reaches cis (pct211) and Hermes (pct103) by
- *  private IP. The CRM address and API keys never leave the server.
+ *  The ONLY route the browser calls to create a booking. It runs server-side,
+ *  so the CRM address never reaches a guest's browser.
  *
  *  Order matters:
- *    1. Validate      — a bad payload never reaches the CRM.
- *    2. Write to CRM  — if this fails, the guest is told to call.
- *    3. Fire WhatsApp — best effort, never fails the booking.
+ *    1. Validate       — a bad payload never reaches the CRM.
+ *    2. Create in CRM  — if this fails, the guest is told to call.
+ *    3. Return the CRM's own reference, amount and payment link.
+ *
+ *  The CRM owns the reservation and the money. This route does not compute an
+ *  amount, does not keep a second copy of the booking, and does not decide
+ *  whether a payment succeeded.
  */
 import { NextResponse } from 'next/server'
-import { createEnquiry } from '../../../lib/crm'
+import { createReservation } from '../../../lib/crm'
 import { sendBookingAck } from '../../../lib/hermes'
 
 export const runtime = 'nodejs'
@@ -22,8 +25,8 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 function validate(b) {
   const e = []
   if (!b.outlet) e.push('outlet')
-  if (!b.offer) e.push('offer')
   if (!b.date || !/^\d{4}-\d{2}-\d{2}$/.test(b.date)) e.push('date')
+  if (!b.session) e.push('session')
   if (!b.time) e.push('time')
   if (!b.name || b.name.trim().length < 2) e.push('name')
   const mobile = String(b.mobile || '').replace(/\D/g, '').slice(-10)
@@ -49,10 +52,8 @@ export async function POST(req) {
     return NextResponse.json({ ok: false, error: 'validation', fields: errors }, { status: 422 })
   }
 
-  const payload = {
+  const crm = await createReservation({
     outlet: body.outlet,
-    offer: body.offer,
-    offerSlug: body.offerSlug,
     occasion: body.occasion || null,
     date: body.date,
     session: body.session,
@@ -60,18 +61,13 @@ export async function POST(req) {
     adults: Number(body.adults),
     children: Number(body.children || 0),
     name: body.name.trim(),
-    mobile: '+91' + mobile,
+    mobile,
     email: body.email ? body.email.trim() : null,
-    area: body.area ? body.area.trim() : null,
-    requests: body.requests ? body.requests.trim() : null,
     attribution: body.attribution || {},
-    idempotencyKey: body.idempotencyKey || 'tvc-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10),
-  }
-
-  const crm = await createEnquiry(payload)
+  })
 
   if (!crm.ok) {
-    console.error('[enquiry] CRM write failed:', crm.error)
+    console.error('[enquiry] CRM booking failed:', crm.error)
     return NextResponse.json(
       {
         ok: false,
@@ -82,19 +78,42 @@ export async function POST(req) {
     )
   }
 
+  // The CRM recorded the guest but could not hold a table (no slot for that
+  // time, venue not chosen, ...). That is a real answer to give a guest, not
+  // an error to hide — and their details are safely with the restaurant.
+  if (!crm.reservationRef) {
+    return NextResponse.json({
+      ok: true,
+      held: false,
+      message: 'We have your request and the restaurant will call you to confirm the table.',
+    })
+  }
+
+  // Best-effort WhatsApp acknowledgement, unchanged and non-blocking. Inert
+  // unless HERMES_BASE_URL is configured. Coupon/receipt delivery is the CRM's
+  // job, not this site's.
   sendBookingAck({
-    mobile: payload.mobile,
-    name: payload.name,
-    outlet: payload.outlet,
-    offer: payload.offer,
-    date: payload.date,
-    time: payload.time,
-    pax: payload.adults + payload.children,
-    reference: crm.reference,
-    paymentUrl: crm.paymentUrl,
+    mobile: '+91' + mobile,
+    name: body.name.trim(),
+    outlet: body.outlet,
+    offer: body.offer || '',
+    date: body.date,
+    time: body.time,
+    pax: Number(body.adults) + Number(body.children || 0),
+    reference: crm.reservationRef,
+    paymentUrl: crm.payUrl,
   }).then(r => {
     if (!r.ok) console.warn('[enquiry] Hermes send failed:', r.error || r.status || 'offline')
-  })
+  }).catch(() => {})
 
-  return NextResponse.json({ ok: true, reference: crm.reference, paymentUrl: crm.paymentUrl })
+  return NextResponse.json({
+    ok: true,
+    held: true,
+    reservationRef: crm.reservationRef,
+    amountPaise: crm.amountPaise,
+    payableCovers: crm.payableCovers,
+    chargeDescription: crm.chargeDescription,
+    payUrl: crm.payUrl,
+    duplicate: crm.duplicateSubmission,
+  })
 }
