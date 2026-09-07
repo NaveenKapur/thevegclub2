@@ -39,5 +39,11 @@ export async function GET(_req, { params }) {
     time: d.slotTime,
     outletName: d.outletName,
     confirmedAt: d.confirmedAt,
+    // The CRM keeps PENDING for a booking that is still held and still
+    // payable, whether the guest has not paid yet or their last attempt was
+    // declined. Only paymentStatus tells the two apart, so the page cannot
+    // show a failed payment as a failure without it. It is a state name, not
+    // guest data, and it is never the authority for a confirmation.
+    paymentStatus: d.paymentStatus,
   })
 }

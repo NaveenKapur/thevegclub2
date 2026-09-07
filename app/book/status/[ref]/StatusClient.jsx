@@ -58,8 +58,15 @@ export default function StatusClient({ reference }) {
     const tick = async () => {
       const j = await check()
       if (stop) return
-      // Settled states need no further polling.
-      const settled = j && ['CONFIRMED', 'EXPIRED', 'CANCELLED', 'ARRIVED', 'COMPLETED', 'NO_SHOW'].includes(j.state)
+      // Settled states need no further polling — and a declined payment is
+      // settled too. The CRM reports a held booking whose last attempt failed
+      // as PENDING (correctly: it is still payable), so without this the page
+      // sits on ‘Confirming your payment…’ for the full two minutes and
+      // never tells the guest the payment was refused.
+      const settled = j && (
+        ['CONFIRMED', 'EXPIRED', 'CANCELLED', 'ARRIVED', 'COMPLETED', 'NO_SHOW'].includes(j.state) ||
+        (j.state === 'PENDING' && j.paymentStatus === 'failed')
+      )
       if (settled) { setPolling(false); return }
       if (Date.now() - startedAt.current > MAX_MS) { setPolling(false); return }
       timer = setTimeout(tick, POLL_MS)
@@ -86,8 +93,12 @@ export default function StatusClient({ reference }) {
   const state = status?.state
   const confirmed = state === 'CONFIRMED'
   const awaiting = state === 'AWAITING_CONFIRMATION'
-  const failedish = state === 'EXPIRED' || state === 'CANCELLED'
-  const pending = state === 'PENDING'
+  // A declined attempt on a booking the CRM is still holding. Same screen as
+  // an expired one, and the wording already fits: the table was not confirmed,
+  // and Try again reuses this very reservation.
+  const paymentFailed = state === 'PENDING' && status?.paymentStatus === 'failed'
+  const failedish = state === 'EXPIRED' || state === 'CANCELLED' || paymentFailed
+  const pending = state === 'PENDING' && !paymentFailed
 
   return (
     <div className="done">
