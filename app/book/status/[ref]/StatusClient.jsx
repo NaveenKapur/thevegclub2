@@ -132,10 +132,9 @@ export default function StatusClient({ reference }) {
                 <div><dt>When</dt><dd>{prettyDate(status.reservationDate)}{status.time ? `, ${status.time}` : ''}</dd></div>
                 <div><dt>Guests</dt><dd>{status.coversTotal}</dd></div>
                 <div><dt>Amount paid</dt><dd>{money(status.amountPaise)}</dd></div>
-                <div><dt>Redeemable</dt><dd>{money(status.couponRedeemablePaise ?? status.amountPaise)}</dd></div>
               </dl>
               <p className="coupon-note">
-                Show this coupon at the restaurant. {money(status.couponRedeemablePaise ?? status.amountPaise)} paid — redeemable against your restaurant bill.
+                Show this coupon at the restaurant. {money(status.couponRedeemablePaise || status.amountPaise)} paid — redeemable against your restaurant bill.
               </p>
             </div>
           ) : null}
