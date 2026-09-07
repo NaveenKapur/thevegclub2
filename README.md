@@ -40,7 +40,7 @@ Without `CRM_BASE_URL`, deals come from `data/deals.js` and bookings return a cl
 ## The CRM contract
 
 Live and proven, 04 Sep 2026. Full spec in the CRM repo:
-`docs/WEBSITE-BOOKING-CONTRACT.md`. Base: `https://crm.radissonveg.com`.
+`docs/WEBSITE-BOOKING-CONTRACT.md`. Base: `https://crm.thevegclub.com`.
 
 **The CRM owns the reservation and the money.** This site never computes the
 amount it charges and never keeps a second copy of a booking.

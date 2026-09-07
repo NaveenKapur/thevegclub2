@@ -25,7 +25,7 @@ const MAX_MS = 120000
 // rotating token. Pointing an <img> at it means this page needs no QR library
 // and, more to the point, the guest's phone and the printed receipt encode the
 // identical payload -- one definition of what a Radisson Veg QR contains.
-const CRM_ORIGIN = 'https://crm.radissonveg.com'
+const CRM_ORIGIN = 'https://crm.thevegclub.com'
 const couponQrSrc = (code) => `${CRM_ORIGIN}/api/public/coupons/${encodeURIComponent(code)}/qr`
 
 const money = (paise) => '₹' + Number(paise / 100).toLocaleString('en-IN')
@@ -34,6 +34,21 @@ function prettyDate(d) {
   if (!d) return ''
   const dt = new Date(d + 'T12:00')
   return isNaN(dt) ? d : dt.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+/* The CRM stores a time column, so it arrives as '13:30:00'. Nobody reads a
+   coupon in seconds-since-midnight notation. */
+function prettyTime(t) {
+  if (!t) return ''
+  const [h, m] = String(t).split(':')
+  const dt = new Date(2000, 0, 1, Number(h), Number(m || 0))
+  return isNaN(dt) ? t : dt.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true })
+}
+
+function prettyWhen(d, t) {
+  const day = prettyDate(d)
+  const time = prettyTime(t)
+  return time ? `${day} · ${time}` : day
 }
 
 export default function StatusClient({ reference }) {
@@ -117,31 +132,39 @@ export default function StatusClient({ reference }) {
           <h2>Table reservation confirmed</h2>
           <p>
             Thank you — your table at {status.outletName} is booked for{' '}
-            {prettyDate(status.reservationDate)}{status.time ? `, ${status.time}` : ''}.
+            {prettyWhen(status.reservationDate, status.time)}.
           </p>
           <p>Please quote your reservation reference on arrival.</p>
 
           {status.couponCode ? (
             <div className="coupon" id="coupon">
-              <p className="coupon-label">Your coupon</p>
+              <p className="coupon-eyebrow">Your restaurant coupon</p>
+
+              <p className="coupon-code-label">Coupon code</p>
               <p className="coupon-code">{status.couponCode}</p>
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="coupon-qr" src={couponQrSrc(status.couponCode)} alt={`QR code for coupon ${status.couponCode}`} width={190} height={190} />
+              <img className="coupon-qr" src={couponQrSrc(status.couponCode)} alt={`QR code for coupon ${status.couponCode}`} width={200} height={200} />
+
               <dl className="coupon-facts">
                 <div><dt>Restaurant</dt><dd>{status.outletName}</dd></div>
-                <div><dt>When</dt><dd>{prettyDate(status.reservationDate)}{status.time ? `, ${status.time}` : ''}</dd></div>
+                <div><dt>Date &amp; Time</dt><dd>{prettyWhen(status.reservationDate, status.time)}</dd></div>
                 <div><dt>Guests</dt><dd>{status.coversTotal}</dd></div>
-                <div><dt>Amount paid</dt><dd>{money(status.amountPaise)}</dd></div>
+                <div><dt>Amount Paid</dt><dd>{money(status.amountPaise)}</dd></div>
               </dl>
-              <p className="coupon-note">
-                Show this coupon at the restaurant. {money(status.couponRedeemablePaise || status.amountPaise)} paid — redeemable against your restaurant bill.
-              </p>
+
+              <div className="coupon-redeem">
+                <p className="coupon-redeem-label">Redeemable against restaurant bill</p>
+                <p className="coupon-redeem-value">{money(status.couponRedeemablePaise || status.amountPaise)}</p>
+              </div>
+
+              <p className="coupon-note">Show this coupon at the restaurant on arrival.</p>
             </div>
           ) : null}
 
           <p>
             <a
-              href={`https://crm.radissonveg.com/api/public/reservations/${encodeURIComponent(reference)}/receipt?format=html`}
+              href={`https://crm.thevegclub.com/api/public/reservations/${encodeURIComponent(reference)}/receipt?format=html`}
               target="_blank"
               rel="noreferrer"
               className="btn"

@@ -248,28 +248,95 @@ details.more[open] summary::before{content:"– "}
 .done .code{font-family:var(--f-display);font-size:29px;color:var(--brass);margin:14px 0}
 
 /* ---- the coupon a paid booking earns ------------------------------------ */
-/* Deliberately a torn-ticket look: it has to read as a thing you hold up at a
-   counter, not as another row of the confirmation summary. */
-.coupon{max-width:340px;margin:22px auto 6px;padding:20px 18px;border:1px dashed var(--brass);border-radius:14px;background:#fff}
-.coupon-label{margin:0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
-.coupon-code{font-family:var(--f-display);font-size:26px;letter-spacing:.06em;margin:6px 0 14px;word-break:break-all}
-.coupon-qr{display:block;margin:0 auto;width:190px;height:190px}
-.coupon-facts{display:grid;gap:6px;margin:16px 0 0;text-align:left;font-size:14px}
-.coupon-facts>div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:5px}
-.coupon-facts>div:last-child{border-bottom:none}
-.coupon-facts dt{opacity:.7;margin:0}
-.coupon-facts dd{margin:0;font-weight:600;text-align:right}
-.coupon-note{margin:14px 0 0;font-size:12.5px;line-height:1.5;opacity:.8}
+/* A ticket, not a panel. It carries its OWN light palette and never inherits
+   the page theme: the first version set a white background but let the text
+   keep the theme's --ink, so in dark mode the whole coupon rendered near-white
+   on white and was effectively unreadable. A thing a guest holds up at a
+   counter -- or prints -- has to look the same everywhere, so every colour
+   below is explicit. All of them clear 4.5:1 on the paper; the code and
+   values clear 13:1. */
+.coupon{
+  --c-paper:#FFFFFF;
+  --c-ink:#14201A;      /* values, code: near-black charcoal, ~17:1 */
+  --c-label:#3C4A42;    /* labels: medium-dark, ~9:1 -- never pale grey */
+  --c-line:#C3CDBF;     /* visible, restrained */
+  --c-forest:#16362A;   /* coupon code */
+  --c-brass:#7E560F;    /* eyebrow + redeemable, ~6:1 on white */
+  max-width:380px; margin:26px auto 8px; padding:26px 22px 22px;
+  background:var(--c-paper); color:var(--c-ink);
+  border:1px solid var(--c-line); border-radius:14px;
+  box-shadow:0 1px 2px rgba(22,33,27,.08),0 10px 28px rgba(22,33,27,.10);
+  text-align:center;
+}
+.coupon p{color:var(--c-ink)}
+.coupon .coupon-eyebrow{
+  margin:0 0 18px; font-family:var(--f-body);
+  font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--c-brass);
+}
+.coupon .coupon-code-label{
+  margin:0 0 4px; font-size:12.5px; font-weight:600; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--c-label);
+}
+.coupon .coupon-code{
+  margin:0 0 20px; font-family:var(--f-display);
+  font-size:30px; line-height:1.15; font-weight:700; letter-spacing:.04em;
+  color:var(--c-forest); word-break:break-word;
+}
+/* Black on white with its own quiet zone, whatever the page is doing. */
+.coupon-qr{
+  display:block; width:200px; height:200px; margin:0 auto 22px;
+  background:#fff; padding:10px; border-radius:8px; border:1px solid var(--c-line);
+}
+.coupon-facts{display:grid; gap:0; margin:0; text-align:left; font-size:15px}
+.coupon-facts>div{
+  display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:11px 0; border-bottom:1px solid var(--c-line);
+}
+.coupon-facts>div:first-child{border-top:1px solid var(--c-line)}
+.coupon-facts dt{margin:0; color:var(--c-label); font-weight:600}
+.coupon-facts dd{margin:0; color:var(--c-ink); font-weight:700; text-align:right}
+.coupon-redeem{margin:20px 0 0; padding:16px 12px; background:#F4F7F1; border-radius:10px}
+.coupon .coupon-redeem-label{
+  margin:0; font-size:11.5px; font-weight:700; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--c-brass);
+}
+.coupon .coupon-redeem-value{
+  margin:6px 0 0; font-family:var(--f-display); font-size:30px; font-weight:700;
+  color:var(--c-forest); line-height:1.1;
+}
+.coupon .coupon-note{margin:16px 0 0; font-size:13.5px; line-height:1.55; color:var(--c-label)}
+
+@media (max-width:420px){
+  .coupon{max-width:100%; padding:22px 16px 18px}
+  .coupon-code{font-size:26px}
+  .coupon-qr{width:176px; height:176px}
+  .coupon-facts{font-size:14.5px}
+}
 
 /* "Save / print coupon" prints the ticket alone -- a guest wants the coupon on
-   the paper, not the site header and a Back link. */
+   the paper, not the site header and a Back link. Fixed positioning rather than
+   absolute so a long page cannot push the ticket off the printable area. */
 @media print{
+  @page{margin:12mm}
+  /* visibility:hidden leaves the element's background painted, so without this
+     the dark page ground still floods the sheet behind the ticket. */
+  html,body{background:#fff!important}
   body *{visibility:hidden}
   .coupon,.coupon *{visibility:visible}
-  .coupon{position:absolute;left:0;right:0;top:0;margin:0 auto;border-color:#000}
+  .coupon{
+    position:fixed; left:0; right:0; top:0; margin:0 auto;
+    max-width:none; width:104mm;
+    box-shadow:none; border:1px solid #333; break-inside:avoid;
+  }
+  .coupon-qr{border-color:#333}
+  .coupon-redeem{background:#fff; border:1px solid #333}
   .btn{display:none!important}
 }
 .done p{color:var(--ink-2);max-width:44ch;margin:0 auto 8px}
+.done a{color:var(--brass-2);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--brass-2) 45%,transparent)}
+.done a:hover,.done a:focus-visible{color:var(--brass);border-bottom-color:var(--brass)}
+.done .btn{border-bottom:none}
 
 /* menu */
 .mgroup{border-top:1px solid var(--line)}
