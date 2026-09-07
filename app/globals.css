@@ -246,6 +246,29 @@ details.more[open] summary::before{content:"– "}
 .done{text-align:center;padding:34px 12px}
 .done h2{font-size:27px}
 .done .code{font-family:var(--f-display);font-size:29px;color:var(--brass);margin:14px 0}
+
+/* ---- the coupon a paid booking earns ------------------------------------ */
+/* Deliberately a torn-ticket look: it has to read as a thing you hold up at a
+   counter, not as another row of the confirmation summary. */
+.coupon{max-width:340px;margin:22px auto 6px;padding:20px 18px;border:1px dashed var(--brass);border-radius:14px;background:#fff}
+.coupon-label{margin:0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.coupon-code{font-family:var(--f-display);font-size:26px;letter-spacing:.06em;margin:6px 0 14px;word-break:break-all}
+.coupon-qr{display:block;margin:0 auto;width:190px;height:190px}
+.coupon-facts{display:grid;gap:6px;margin:16px 0 0;text-align:left;font-size:14px}
+.coupon-facts>div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:5px}
+.coupon-facts>div:last-child{border-bottom:none}
+.coupon-facts dt{opacity:.7;margin:0}
+.coupon-facts dd{margin:0;font-weight:600;text-align:right}
+.coupon-note{margin:14px 0 0;font-size:12.5px;line-height:1.5;opacity:.8}
+
+/* "Save / print coupon" prints the ticket alone -- a guest wants the coupon on
+   the paper, not the site header and a Back link. */
+@media print{
+  body *{visibility:hidden}
+  .coupon,.coupon *{visibility:visible}
+  .coupon{position:absolute;left:0;right:0;top:0;margin:0 auto;border-color:#000}
+  .btn{display:none!important}
+}
 .done p{color:var(--ink-2);max-width:44ch;margin:0 auto 8px}
 
 /* menu */

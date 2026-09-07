@@ -21,6 +21,13 @@ import { SITE } from '../../../../lib/config'
 const POLL_MS = 3000
 const MAX_MS = 120000
 
+// The coupon QR is rendered by the CRM, which is the only place that knows the
+// rotating token. Pointing an <img> at it means this page needs no QR library
+// and, more to the point, the guest's phone and the printed receipt encode the
+// identical payload -- one definition of what a Radisson Veg QR contains.
+const CRM_ORIGIN = 'https://crm.radissonveg.com'
+const couponQrSrc = (code) => `${CRM_ORIGIN}/api/public/coupons/${encodeURIComponent(code)}/qr`
+
 const money = (paise) => '₹' + Number(paise / 100).toLocaleString('en-IN')
 
 function prettyDate(d) {
@@ -113,6 +120,26 @@ export default function StatusClient({ reference }) {
             {prettyDate(status.reservationDate)}{status.time ? `, ${status.time}` : ''}.
           </p>
           <p>Please quote your reservation reference on arrival.</p>
+
+          {status.couponCode ? (
+            <div className="coupon" id="coupon">
+              <p className="coupon-label">Your coupon</p>
+              <p className="coupon-code">{status.couponCode}</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="coupon-qr" src={couponQrSrc(status.couponCode)} alt={`QR code for coupon ${status.couponCode}`} width={190} height={190} />
+              <dl className="coupon-facts">
+                <div><dt>Restaurant</dt><dd>{status.outletName}</dd></div>
+                <div><dt>When</dt><dd>{prettyDate(status.reservationDate)}{status.time ? `, ${status.time}` : ''}</dd></div>
+                <div><dt>Guests</dt><dd>{status.coversTotal}</dd></div>
+                <div><dt>Amount paid</dt><dd>{money(status.amountPaise)}</dd></div>
+                <div><dt>Redeemable</dt><dd>{money(status.couponRedeemablePaise ?? status.amountPaise)}</dd></div>
+              </dl>
+              <p className="coupon-note">
+                Show this coupon at the restaurant. {money(status.couponRedeemablePaise ?? status.amountPaise)} paid — redeemable against your restaurant bill.
+              </p>
+            </div>
+          ) : null}
+
           <p>
             <a
               href={`https://crm.radissonveg.com/api/public/reservations/${encodeURIComponent(reference)}/receipt?format=html`}
@@ -121,7 +148,10 @@ export default function StatusClient({ reference }) {
               className="btn"
             >
               View / print receipt
-            </a>
+            </a>{' '}
+            {status.couponCode ? (
+              <button className="btn ghost" onClick={() => window.print()}>Save / print coupon</button>
+            ) : null}
           </p>
           <p className="small">Your cover charge is redeemable against your restaurant bill.</p>
         </>

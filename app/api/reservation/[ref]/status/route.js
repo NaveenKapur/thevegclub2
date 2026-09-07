@@ -45,5 +45,12 @@ export async function GET(_req, { params }) {
     // show a failed payment as a failure without it. It is a state name, not
     // guest data, and it is never the authority for a confirmation.
     paymentStatus: d.paymentStatus,
+    // The coupon the paid booking earned. The code is safe to show -- a guest
+    // reads it out at the counter. The QR's rotating token is NOT here: it
+    // stays inside the image the CRM renders, so nothing opaque is ever
+    // printed as text on the page.
+    couponCode: d.couponCode,
+    couponStatus: d.couponStatus,
+    couponRedeemablePaise: d.couponRedeemablePaise,
   })
 }
