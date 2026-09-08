@@ -37,6 +37,7 @@ export function RestaurantCtas({ restaurant, hasDeals, dealsAnchor = '#coupons',
         onClose={() => setOpen(false)}
         restaurants={restaurants}
         presetRestaurant={restaurant.slug}
+        presetRestaurantName={restaurant.name}
         context={{ dealSlug: null, occasionCard: null }}
       />
     </>

@@ -31,6 +31,7 @@ export default function EnquiryDialog({
   onClose,
   restaurants = [],
   presetRestaurant = '',
+  presetRestaurantName = '',
   presetOccasion = '',
   lockRestaurant = false,
   context = {},
@@ -67,6 +68,19 @@ export default function EnquiryDialog({
   }, [open, onClose])
 
   if (!open) return null
+
+  /*  A page must never open this form on a restaurant the dropdown cannot
+   *  offer. The list comes from the CRM's outlets; the site can legitimately
+   *  have a page for a venue the CRM has not been given yet, and when that
+   *  happens the preselected slug would match no option, the select would sit
+   *  blank, and a required field would be unsatisfiable on the one page that
+   *  exists purely to take enquiries. So an unknown preset is added to the
+   *  list rather than silently dropped -- the CRM attaches an outlet only when
+   *  it recognises the slug, so the worst case is an enquiry with no venue
+   *  attached instead of one attached to the wrong venue.  */
+  const options = restaurants.some(r => r.slug === presetRestaurant) || !presetRestaurant
+    ? restaurants
+    : [...restaurants, { slug: presetRestaurant, name: presetRestaurantName || presetRestaurant }]
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
@@ -153,7 +167,7 @@ export default function EnquiryDialog({
               <label className="lbl" htmlFor="eqrest">Restaurant *</label>
               <select id="eqrest" value={form.restaurant} onChange={set('restaurant')} disabled={lockRestaurant}>
                 <option value="">Choose…</option>
-                {restaurants.map(r => <option key={r.slug} value={r.slug}>{r.name}</option>)}
+                {options.map(r => <option key={r.slug} value={r.slug}>{r.name}</option>)}
                 <option value="not-sure">Not sure</option>
               </select>
               <p className="err">Please choose a restaurant, or “Not sure”.</p>
