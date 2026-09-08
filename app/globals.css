@@ -951,22 +951,27 @@ aside.dealbox .eyebrow{
     pushed off the edge. The caption is the last thing to go, and only below
     340px where nothing else can give.                                    */
 @media(max-width:420px){
-  .lockup-mark{width:31px;height:31px}
-  .logo.lockup{gap:8px}
-  .lockup-name{font-size:16.5px}
+  .lockup-mark{width:30px;height:30px}
+  .logo.lockup{gap:7px}
+  .lockup-name{font-size:15.5px}
   .lockup-region{font-size:8.5px;letter-spacing:.16em}
   .lockup-caption{font-size:9.5px}
-  .hdr .wrap{height:56px;gap:8px}
-  .hdr nav{gap:11px;font-size:12.5px}
-  .hdr nav a{font-size:12.5px}
+  .hdr nav{gap:10px;font-size:12px}
+  .hdr nav a{font-size:12px}
+
+  /*  Below about 375px the lockup and three nav items genuinely do not fit on
+      one line, whatever they are shrunk to. A fixed-height flex row in that
+      situation does not compress -- it overflows, and the item that falls off
+      the right edge is "Book". So the row is allowed to wrap and the bar is
+      allowed to grow instead. Above the point where it fits, nothing wraps and
+      the header is exactly as tall as it was.                              */
+  .hdr .wrap{height:auto;min-height:56px;gap:6px 8px;flex-wrap:wrap;padding-block:7px}
+  .hdr nav{margin-left:auto}
 }
 @media(max-width:339px){
-  .lockup-caption{display:none}
-  .hdr .wrap{height:50px}
-  .lockup-mark{width:27px;height:27px}
+  .lockup-mark{width:28px;height:28px}
   .lockup-name{font-size:15px}
-  .hdr nav{gap:9px;font-size:12px}
-  .hdr nav a{font-size:12px}
+  .hdr nav{gap:9px}
 }
 
 /*  The secondary action on the failed-payment screen.
