@@ -15,7 +15,7 @@ export const revalidate = 300
 
 export const metadata = pageMeta({
   title: 'Veg Buffet Deals in Ghaziabad — 1+1 from ₹2,799 | Veg Club',
-  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. ₹50 a person cover charge, redeemable.',
+  description: 'Vegetarian buffet coupons at 64/6, Sahibabad. Lunch 1+1 ₹2,799 for two against a ₹5,598 counter price. Dinner 1+1 ₹3,299. ₹50 a person cover charge — non-refundable, adjusted against your bill.',
   path: '/',
   og: 'home',
   imageAlt: 'The Veg Club — vegetarian buffet deals in Ghaziabad from ₹1,399 a person',
@@ -33,7 +33,7 @@ const FAQS = [
   { q: 'Do children pay?',
     a: 'Children up to 5 years are complimentary and are not added to the bill at all. Children above 5 are counted as guests at the deal rate.' },
   { q: 'What is the ₹50?',
-    a: '₹50 per person cover charge, which is redeemable — it comes off your restaurant bill. It holds your table and locks the deal price.' },
+    a: '₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at the hotel. It holds your table and locks the deal price, and it has no cash value.' },
   { q: 'Can I get these prices anywhere else?',
     a: 'No. These coupon prices are available only on thevegclub.com — they are direct rates from the restaurant, with no platform commission built in.' },
   { q: 'Do the restaurants cook without onion and garlic?',

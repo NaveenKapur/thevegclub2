@@ -19,7 +19,7 @@ export function generateStaticParams() {
 }
 
 const META = {
-  '64-6': ['64/6 Buffet Sahibabad — Lunch 1+1 ₹2,799 for Two', 'Vegetarian buffet at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two, dinner 1+1 ₹3,299. Weekend rates listed separately. ₹50 a person cover charge, redeemable.'],
+  '64-6': ['64/6 Buffet Sahibabad — Lunch 1+1 ₹2,799 for Two', 'Vegetarian buffet at 64/6, Sahibabad. Weekday lunch 1+1 ₹2,799 for two, dinner 1+1 ₹3,299. Weekend rates listed separately. ₹50 a person cover charge — non-refundable, adjusted against your bill.'],
   '3bs': ["3B's Poolside Restaurant, Sahibabad — Opening Soon", 'Open-air poolside vegetarian dining at Sahibabad. North Indian, Chinese, Italian and Thai. Coupons opening shortly.'],
   'tatva': ['Tatva Fine Dining, Sahibabad — Opening Soon', 'Indoor à la carte vegetarian fine dining with a full bar at Sahibabad. Coupons opening shortly.'],
   'skydeck': ['Skydeck — Private Party Lounge, Sahibabad', 'Skydeck is the private party lounge at Sahibabad, hired whole for gatherings of 50 or more. Birthdays, anniversaries, corporate evenings. Quoted per event.'],
@@ -48,7 +48,7 @@ const TERMS = (r) => [
   { q: 'Can it be combined with another offer?', a: 'No. A coupon cannot be combined with any other discount or promotion.' },
   { q: 'What about children?', a: 'Children up to 5 years are complimentary and are not added to the bill at all. Children above 5 are counted as guests at the deal rate.' },
   { q: 'Can the kitchen cook without onion and garlic?', a: 'Yes — sattvic dishes without onion or garlic are prepared on request. Mention it when booking so the kitchen is ready.' },
-  { q: 'What is the ₹50?', a: '₹50 per person cover charge, which is redeemable — it comes off your restaurant bill. It holds the table and locks the deal price.' },
+  { q: 'What is the ₹50?', a: '₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at the hotel. It holds the table and locks the deal price, and it has no cash value.' },
 ]
 
 export default async function RestaurantPage({ params }) {

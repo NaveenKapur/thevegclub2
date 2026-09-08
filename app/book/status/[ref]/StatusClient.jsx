@@ -154,11 +154,15 @@ export default function StatusClient({ reference }) {
               </dl>
 
               <div className="coupon-redeem">
-                <p className="coupon-redeem-label">Redeemable against restaurant bill</p>
+                <p className="coupon-redeem-label">Adjustable against restaurant bill</p>
                 <p className="coupon-redeem-value">{money(status.couponRedeemablePaise || status.amountPaise)}</p>
               </div>
 
               <p className="coupon-note">Show this coupon at the restaurant on arrival.</p>
+              <p className="coupon-terms">
+                ₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill
+                at the hotel.
+              </p>
             </div>
           ) : null}
 
@@ -175,7 +179,10 @@ export default function StatusClient({ reference }) {
               <button className="btn ghost" onClick={() => window.print()}>Save / print coupon</button>
             ) : null}
           </p>
-          <p className="small">Your cover charge is redeemable against your restaurant bill.</p>
+          <p className="small">
+            ₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at
+            the hotel. See our <Link href="/refunds">Cancellation &amp; Refund Policy</Link>.
+          </p>
         </>
       )}
 

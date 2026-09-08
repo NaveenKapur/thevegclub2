@@ -30,7 +30,7 @@ export default function DealBox({ from = 1399, compact = false, at = null }) {
         Book from {money(from)}
       </Link>
       <p className="finep">
-        Just {money(RESERVATION_FEE)} per person cover charge to book — redeemable against your restaurant bill.
+        Just {money(RESERVATION_FEE)} per payable guest to book — non-refundable, adjustable against your final restaurant bill at the hotel.
       </p>
     </aside>
   )

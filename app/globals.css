@@ -869,3 +869,64 @@ aside.dealbox .eyebrow{
   letter-spacing:-.015em;color:var(--ink)
 }
 .deal .rack em{font-style:normal;color:var(--brass)}
+
+/* ── legal identity footer ─────────────────────────────────────────────
+   The footer now carries the merchant's registered identity and the policy
+   links a payment provider expects to find from any page. Three areas: the
+   identity block, the link row, and a small technology credit set apart at
+   the bottom right so it is never read as the merchant.               */
+.ftr{display:grid;gap:18px}
+.ftr-name{margin:0;font-size:13.5px;line-height:1.5}
+.ftr-name b{color:var(--on-forest)}
+.ftr-addr{margin:6px 0 0;font-style:normal;font-size:12.5px;line-height:1.6}
+.ftr-reg{margin:6px 0 0;font-size:12.5px;letter-spacing:.01em;color:#B9C9BE}
+.ftr-outlets{margin:10px 0 0;font-size:12px;color:#8FA396}
+.ftr-links{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:16px;border-top:1px solid rgba(237,241,233,.14)}
+.ftr-links a{color:#C6D5C9;text-decoration:none;font-size:12.5px}
+.ftr-links a:hover{color:var(--brass-2);text-decoration:underline}
+.ftr-credit{margin:0;text-align:right;font-size:11.5px}
+.ftr-credit a{color:#7E9186;text-decoration:none}
+.ftr-credit a:hover{color:var(--brass-2)}
+@media(min-width:760px){
+  .ftr{grid-template-columns:1fr;gap:16px}
+  .ftr-credit{margin-top:-8px}
+}
+
+/* ── legal & compliance pages ──────────────────────────────────────────
+   Seven pages a reviewer reads side by side, so they share one measure,
+   one type scale and one identity block.                              */
+.legal{max-width:760px;padding-block:26px 44px}
+.legal-eyebrow{margin:0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.legal h1{font-size:clamp(26px,5.2vw,36px);line-height:1.15;letter-spacing:-.02em;margin:10px 0 0}
+.legal-lede{margin:12px 0 0;font-size:16.5px;line-height:1.6;color:var(--ink-2)}
+.legal-body{margin-top:26px}
+.legal-body h2{font-size:18px;margin:30px 0 8px;letter-spacing:-.01em}
+.legal-body h2:first-child{margin-top:0}
+.legal-body p{margin:0 0 12px;font-size:15px;line-height:1.65;color:var(--ink-2)}
+.legal-body ul{margin:0 0 14px;padding-left:20px}
+.legal-body li{margin-bottom:7px;font-size:15px;line-height:1.6;color:var(--ink-2)}
+.legal-body b{color:var(--ink)}
+.legal-body a{color:var(--brass);font-weight:600}
+
+/*  The commercial rule, quoted identically wherever it appears. Given its own
+    block so a reviewer cannot miss it and a guest cannot skim past it. */
+.legal-rule{margin:0 0 16px;padding:14px 16px;background:var(--panel-2);
+  border-left:3px solid var(--brass);border-radius:0 var(--r) var(--r) 0;
+  font-size:15px;line-height:1.55}
+.legal-rule b{color:var(--ink);font-weight:700}
+
+.legal-merchant{margin-top:38px;padding:18px 20px;background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--r)}
+.legal-merchant h2{font-size:16px;margin:0 0 10px}
+.legal-merchant-name{margin:0;font-size:15px;line-height:1.55;color:var(--ink)}
+.legal-merchant address{margin:8px 0 0;font-style:normal;font-size:14px;line-height:1.6;color:var(--ink-2)}
+.legal-reg{margin:10px 0 0;font-size:13.5px;color:var(--ink-2);letter-spacing:.01em}
+.legal-updated{margin:20px 0 0;font-size:12.5px;color:var(--ink-3)}
+.legal-back{margin:8px 0 0;font-size:14px}
+.legal-back a{color:var(--brass);text-decoration:none}
+.legal-back a:hover{text-decoration:underline}
+
+/*  The commercial rule under a coupon: present, readable, and clearly
+    subordinate to the code and the QR the guest is actually showing. */
+.coupon-terms{margin:8px 0 0;font-size:11.5px;line-height:1.5;color:var(--ink-3);max-width:34ch;margin-inline:auto;text-align:center}
+.chargerule{display:block;color:var(--ink);margin-bottom:4px}

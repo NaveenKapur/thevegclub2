@@ -135,12 +135,12 @@ export default function LandingClient({ lp, gallery }) {
               <tr><th>Two guests</th><th>You pay</th></tr>
               <tr><td>Walking in off the street</td><td>₹{money(lp.was)}</td></tr>
               <tr><td>This deal, booked online</td><td className="hi">₹{money(lp.price)}</td></tr>
-              <tr><td>Cover charge (redeemable)</td><td>₹50 a person</td></tr>
+              <tr><td>Cover charge (non-refundable, adjusted against your bill)</td><td>₹50 a person</td></tr>
               <tr><td><b>You keep</b></td><td className="hi">₹{money(lp.was - lp.price - 50)}</td></tr>
             </tbody>
           </table>
           <p className="lede rv" style={{ marginTop: 22 }}>
-            ₹50 per person cover charge, redeemable against your restaurant bill.
+            ₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at the hotel.
           </p>
         </div>
       </section>
@@ -210,7 +210,7 @@ export default function LandingClient({ lp, gallery }) {
                 <button className="cta" type="submit" disabled={busy} style={{ width: '100%' }}>
                   {busy ? 'Sending…' : 'Grab my coupon — ₹50'}
                 </button>
-                <p className="note">₹50 per person cover charge, redeemable against your restaurant bill. Minimum 2 guests.</p>
+                <p className="note">₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at the hotel. Minimum 2 guests.</p>
               </form>
             )}
           </div>

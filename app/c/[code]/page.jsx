@@ -90,7 +90,7 @@ export default async function CouponPage({ params }) {
 
           {c.redeemablePaise > 0 ? (
             <div className="coupon-redeem">
-              <p className="coupon-redeem-label">Redeemable against restaurant bill</p>
+              <p className="coupon-redeem-label">Adjustable against restaurant bill</p>
               <p className="coupon-redeem-value">{money(c.redeemablePaise)}</p>
             </div>
           ) : null}
@@ -99,6 +99,10 @@ export default async function CouponPage({ params }) {
             {spent
               ? 'This coupon has already been used. Nothing further is needed.'
               : 'Show this coupon at the restaurant on arrival.'}
+          </p>
+          <p className="coupon-terms">
+            ₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at
+            the hotel.
           </p>
         </div>
 

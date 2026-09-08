@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
-import { quote, money, isWeekend, SERVICE, RACK, RESERVATION_FEE } from '../lib/pricing'
+import { quote, money, isWeekend, SERVICE, RACK, RESERVATION_FEE, CHARGE_TERMS } from '../lib/pricing'
 
 const MEALS = ['breakfast', 'lunch', 'dinner']
 
@@ -111,9 +111,7 @@ export default function BookingCart({ outletName = '64/6' }) {
           <h2>Table held</h2>
           {done.reservationRef ? <div className="code">{done.reservationRef}</div> : null}
           <p>
-            {done.chargeDescription
-              ? done.chargeDescription
-              : `${money(RESERVATION_FEE)} per paying guest, redeemable against your restaurant bill.`}
+            {done.chargeDescription ? done.chargeDescription : CHARGE_TERMS.headline}
           </p>
           {done.payUrl
             ? <p>Taking you to the secure payment page…</p>
@@ -257,9 +255,9 @@ export default function BookingCart({ outletName = '64/6' }) {
         </div>
       </div>
       <p className="hint billnote">
-        {money(bill.feePerGuest)} per person cover charge, which is <b>redeemable</b> — it comes off
-        your restaurant bill, leaving {money(bill.balance)} to pay at the table. It holds your table
-        and locks this price.
+        <b className="chargerule">{CHARGE_TERMS.headline}</b>
+        It comes off your restaurant bill, leaving {money(bill.balance)} to pay at the table, and it
+        holds your table and locks this price. It has no cash value and is not refundable in cash.
       </p>
       </>
       )}
@@ -279,8 +277,9 @@ export default function BookingCart({ outletName = '64/6' }) {
             </div>
           </div>
           <p className="hint billnote">
-            {money(bill.feePerGuest)} per person cover charge, which is <b>redeemable</b> — it comes off
-            your restaurant bill. It holds your table.
+            <b className="chargerule">{CHARGE_TERMS.headline}</b>
+            It comes off your restaurant bill and holds your table. It has no cash value and is not
+            refundable in cash.
           </p>
         </>
       )}

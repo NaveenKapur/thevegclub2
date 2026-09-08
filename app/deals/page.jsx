@@ -10,7 +10,7 @@ export const revalidate = 300
 
 export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Delhi NCR',
-  description: 'Every live vegetarian dining deal in Ghaziabad and Sahibabad — buffets from ₹1,399, 1+1 dinners, 20% off à la carte. ₹50 a person cover charge, redeemable.',
+  description: 'Every live vegetarian dining deal in Ghaziabad and Sahibabad — buffets from ₹1,399, 1+1 dinners, 20% off à la carte. ₹50 a person cover charge — non-refundable, adjusted against your bill.',
   path: '/deals',
   og: 'deals',
   imageAlt: 'Live vegetarian buffet coupons in Ghaziabad — up to 50% off the counter price',
@@ -45,7 +45,7 @@ export default async function Deals() {
 
       <div className="wrap sec">
         <h2>How the ₹50 works</h2>
-        <p className="sub">Get up to 50% off the counter price. Choose a deal and fill the booking form — ₹50 per person cover charge, which is redeemable against your restaurant bill. Your coupon arrives on WhatsApp with a code; show it at the restaurant and the deal price is applied.</p>
+        <p className="sub">Get up to 50% off the counter price. Choose a deal and fill the booking form — ₹50 per payable guest, non-refundable and adjustable against your final restaurant bill at the hotel. Your coupon arrives on WhatsApp with a code; show it at the restaurant and the deal price is applied.</p>
       </div>
     </main>
   )

@@ -11,7 +11,7 @@ import { pageMeta } from '../../lib/seo'
 
 export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Sahibabad & Ghaziabad',
-  description: 'Pure vegetarian restaurant deals in Sahibabad, Ghaziabad and Indirapuram. Buffet coupons from ₹1,399 a head, 1+1 dinners at half the counter price. ₹50 a person cover charge, redeemable.',
+  description: 'Pure vegetarian restaurant deals in Sahibabad, Ghaziabad and Indirapuram. Buffet coupons from ₹1,399 a head, 1+1 dinners at half the counter price. ₹50 a person cover charge — non-refundable, adjusted against your bill.',
   path: '/restaurants',
   og: 'restaurants',
   imageAlt: 'Vegetarian restaurant deals in Sahibabad and Ghaziabad from ₹1,399 a person',
@@ -147,7 +147,7 @@ export default function Restaurants() {
                 <tr><td>The price you pay</td><td className="hi">An exact rupee figure — {money(2799)} for two</td><td>Counter price, {money(RACK.lunch * 2)} for two</td></tr>
                 <tr><td>Who sets it</td><td className="hi">The restaurant, direct</td><td>The restaurant</td></tr>
                 <tr><td>Discount</td><td className="hi">Up to 50% off the counter price</td><td>None</td></tr>
-                <tr><td>What you pay upfront</td><td className="hi">{money(50)} a person, redeemable against your bill</td><td>Nothing</td></tr>
+                <tr><td>What you pay upfront</td><td className="hi">{money(50)} a person, adjusted against your bill</td><td>Nothing</td></tr>
                 <tr><td>Where the coupon lives</td><td className="hi">WhatsApp, with your booking reference</td><td>—</td></tr>
                 <tr><td>Is a table held?</td><td className="hi">Yes</td><td>Subject to availability</td></tr>
               </tbody>
@@ -202,7 +202,7 @@ export default function Restaurants() {
           <Reveal>
             <h3>How the ₹50 works</h3>
             <p>
-              ₹50 per person cover charge, which is redeemable — it comes off your restaurant bill,
+              ₹50 per payable guest · Non-refundable · Adjustable against your final restaurant bill at the hotel. It comes off your restaurant bill,
               so it is not an extra cost. It holds your table and locks the coupon price. Your coupon
               arrives on WhatsApp with a booking reference; show it at the table and the deal price is
               applied to your bill — up to 50% off the counter price.
