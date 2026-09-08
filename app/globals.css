@@ -336,7 +336,16 @@ details.more[open] summary::before{content:"– "}
 .done p{color:var(--ink-2);max-width:44ch;margin:0 auto 8px}
 .done a{color:var(--brass-2);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--brass-2) 45%,transparent)}
 .done a:hover,.done a:focus-visible{color:var(--brass);border-bottom-color:var(--brass)}
-.done .btn{border-bottom:none}
+/*  `.done a` gives inline links a 1px bottom border as their underline, and
+    that rule reached the buttons too. Cancelling it with border-bottom:none
+    also removed the button's OWN bottom border -- invisible on the filled
+    primary, but it left the secondary button as a three-sided box open along
+    the bottom. That open outline is what read as "too faint". Give both a
+    real, complete border instead of removing one side.                   */
+.done .btn{border:1px solid var(--cta-bg)}
+/*  Stacked full-width buttons on a phone otherwise sit edge to edge and read
+    as one control.  */
+.done .btn + .btn{margin-top:10px}
 
 /* menu */
 .mgroup{border-top:1px solid var(--line)}
@@ -980,8 +989,7 @@ aside.dealbox .eyebrow{
     pixels of forest green, the text in the same green, and a filled hover so
     it is still plainly the quieter of the two buttons.                */
 .done .btn.ghost{
-  border-width:2px;
-  border-color:var(--forest);
+  border:2px solid var(--forest);
   color:var(--forest);
   font-weight:700;
   background:transparent
