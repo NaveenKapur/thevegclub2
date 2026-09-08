@@ -944,11 +944,29 @@ aside.dealbox .eyebrow{
   color:var(--ink-3);font-weight:700;margin-top:2px}
 .lockup-caption{display:block;font-family:var(--f-body);font-size:10.5px;letter-spacing:.01em;
   color:var(--brass);font-weight:600;margin-top:3px;white-space:nowrap}
-@media(max-width:379px){
+/*  Narrow phones. The lockup added a 36px mark and a caption to a bar that
+    also carries three nav items, and at 360px -- an iPhone mini, half the
+    Androids in India -- that overflowed the viewport by 19px. So the whole
+    row steps down together, mark and type and nav, rather than the nav being
+    pushed off the edge. The caption is the last thing to go, and only below
+    340px where nothing else can give.                                    */
+@media(max-width:420px){
+  .lockup-mark{width:31px;height:31px}
+  .logo.lockup{gap:8px}
+  .lockup-name{font-size:16.5px}
+  .lockup-region{font-size:8.5px;letter-spacing:.16em}
+  .lockup-caption{font-size:9.5px}
+  .hdr .wrap{height:56px;gap:8px}
+  .hdr nav{gap:11px;font-size:12.5px}
+  .hdr nav a{font-size:12.5px}
+}
+@media(max-width:339px){
   .lockup-caption{display:none}
-  .hdr .wrap{height:52px}
-  .lockup-mark{width:30px;height:30px}
-  .lockup-name{font-size:16px}
+  .hdr .wrap{height:50px}
+  .lockup-mark{width:27px;height:27px}
+  .lockup-name{font-size:15px}
+  .hdr nav{gap:9px;font-size:12px}
+  .hdr nav a{font-size:12px}
 }
 
 /*  The secondary action on the failed-payment screen.
