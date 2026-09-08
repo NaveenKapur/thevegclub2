@@ -8,6 +8,9 @@ import { LovedBand } from '../../components/Rating'
 import { JsonLd, faq, breadcrumbs, restaurant as rSchema } from '../../lib/schema'
 import { SITE } from '../../lib/config'
 import { pageMeta } from '../../lib/seo'
+import { bookHref } from '../../lib/booking-intent'
+import { OccasionCtas } from '../../components/EnquiryCta'
+import { getOutlets } from '../../lib/outlets'
 
 export const metadata = pageMeta({
   title: 'Vegetarian Restaurant Deals in Sahibabad & Ghaziabad',
@@ -17,11 +20,26 @@ export const metadata = pageMeta({
   imageAlt: 'Vegetarian restaurant deals in Sahibabad and Ghaziabad from ₹1,399 a person',
 })
 
+/*  Each card names the occasion the CRM will file the enquiry under, and --
+    where a real live deal actually backs the card -- the booking intent its
+    "Book this" link should carry. A card with no real deal behind it gets no
+    booking link and offers the enquiry instead; inventing a deal to keep a
+    button company would be the one thing worse than a missing button.
+    `pax` is deliberately absent: none of these cards states a guest count, so
+    none is prefilled.                                                      */
 const OCCASIONS = [
-  { t: 'Kitty party deals', d: 'Weekday lunch buffet for a group, reserved seating, up to 20 guests. The 1+1 rate applies to every pair.', img: 's_hall' },
-  { t: 'Birthday party deals', d: 'A private corner, cake arrangement on request and the full buffet. From 10 guests upward.', img: 's_atrium' },
-  { t: 'Anniversary dinner deals', d: 'Dinner 1+1 at ₹3,299 for two on weekdays at 64/6 — two dinners for the price of one.', img: 's_live' },
-  { t: 'Family get-together deals', d: 'Sunday or weekday, breakfast through dinner. Children up to 5 years eat free.', img: 's_long' },
+  { t: 'Kitty party deals', occasion: 'Kitty Party',
+    deal: { meal: 'lunch', day: 'weekday', guests: 2, deal: 'lunch-1-plus-1' },
+    d: 'Weekday lunch buffet for a group, reserved seating, up to 20 guests. The 1+1 rate applies to every pair.', img: 's_hall' },
+  { t: 'Birthday party deals', occasion: 'Birthday',
+    deal: { meal: 'dinner', day: 'weekday', guests: 2, deal: 'dinner-1-plus-1' },
+    d: 'A private corner, cake arrangement on request and the full buffet. From 10 guests upward.', img: 's_atrium' },
+  { t: 'Anniversary dinner deals', occasion: 'Anniversary',
+    deal: { meal: 'dinner', day: 'weekday', guests: 2, deal: 'dinner-1-plus-1' },
+    d: 'Dinner 1+1 at ₹3,299 for two on weekdays at 64/6 — two dinners for the price of one.', img: 's_live' },
+  { t: 'Family get-together deals', occasion: 'Family Get-Together',
+    deal: { meal: 'lunch', day: 'weekday', guests: 2, deal: 'lunch-1-plus-1' },
+    d: 'Sunday or weekday, breakfast through dinner. Children up to 5 years eat free.', img: 's_long' },
 ]
 
 const FAQS = [
@@ -39,7 +57,8 @@ const FAQS = [
     a: 'There is no code to hunt for. You book on this site, pay ₹50 to hold the table, and a coupon with your booking reference arrives on WhatsApp. Show it at the restaurant and the deal price is applied to your bill.' },
 ]
 
-export default function Restaurants() {
+export default async function Restaurants() {
+  const outlets = await getOutlets()
   const live = RESTAURANTS.filter(r => r.status === 'live')
 
   return (
@@ -116,7 +135,12 @@ export default function Restaurants() {
                 <div className="occbody">
                   <h3>{o.t}</h3>
                   <p>{o.d}</p>
-                  <Link href="/book" className="occgo">Book this →</Link>
+                  <OccasionCtas
+                    occasionLabel={o.occasion}
+                    bookHref={o.deal ? bookHref(o.deal) : null}
+                    restaurants={outlets}
+                    presetRestaurant="64-6"
+                  />
                 </div>
               </article>
             </Reveal>

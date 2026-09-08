@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { istPlusDays } from '../../../lib/date-ist'
 
 const money = n => Number(n).toLocaleString('en-IN')
 
@@ -53,7 +54,8 @@ export default function LandingClient({ lp, gallery }) {
     return () => window.removeEventListener('scroll', on)
   }, [])
 
-  const minDate = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().slice(0, 10) })()
+  // Tomorrow in India -- see lib/date-ist.js for why this is not toISOString().
+  const minDate = istPlusDays(1)
 
   async function submit(e) {
     e.preventDefault()

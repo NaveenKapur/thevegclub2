@@ -1015,3 +1015,47 @@ aside.dealbox .eyebrow{
 /*  A deal click that carried a day with it says so, rather than leaving the
     guest to wonder why a date is already filled in.                    */
 .prefilled{font-size:12px;color:var(--brass);margin:6px 0 0;font-weight:600}
+
+/* ── Enquire Now dialog ────────────────────────────────────────────────
+   A dialog rather than a page, so asking a question does not cost a guest
+   their place on the restaurant page. Bottom sheet on a phone, centred
+   card on a desktop.                                                   */
+.enqwrap{position:fixed;inset:0;z-index:200;background:rgba(11,20,16,.55);
+  display:flex;align-items:flex-end;justify-content:center;padding:0;
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.enqpanel{position:relative;background:var(--panel);color:var(--ink);width:100%;
+  max-width:520px;max-height:92dvh;overflow-y:auto;border-radius:16px 16px 0 0;
+  padding:22px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+@media(min-width:640px){
+  .enqwrap{align-items:center;padding:24px}
+  .enqpanel{border-radius:var(--r);max-height:88dvh;padding:26px 26px 24px}
+}
+.enqpanel h2{font-size:22px;letter-spacing:-.01em;margin:0 0 6px}
+.enqsub{font-size:13.5px;color:var(--ink-2);margin:0 0 16px;line-height:1.5}
+.enqx{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--ink-3);
+  font-size:26px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
+.enqx:hover,.enqx:focus-visible{color:var(--ink);background:var(--panel-2)}
+.enqrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.enqpanel .fgroup{margin-bottom:12px}
+.enqpanel select,.enqpanel input,.enqpanel textarea{width:100%}
+.enqpanel select{
+  appearance:none;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:11px 12px;font-family:inherit;font-size:15px
+}
+.enqpanel select:disabled{opacity:.75}
+.enqdone{text-align:center;padding:18px 4px 8px}
+.enqdone h2{margin-bottom:8px}
+.enqdone p{color:var(--ink-2);margin:0 0 18px;line-height:1.55}
+
+/*  Three CTAs on a restaurant page. Side by side where they fit, stacked with
+    full-size tap targets where they do not — never three cramped slivers. */
+.ctarow-3{display:flex;flex-wrap:wrap;gap:10px}
+.ctarow-3 .btn{flex:1 1 100%;min-width:0}
+@media(min-width:560px){.ctarow-3 .btn{flex:1 1 0;width:auto;min-width:0}}
+
+/*  Occasion cards keep their direct booking link and gain an enquiry beside
+    it — the group bookings these cards describe usually need a conversation. */
+.occacts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+.occenq{background:none;border:0;padding:0;font:inherit;font-size:14px;font-weight:700;
+  color:var(--brass);cursor:pointer;letter-spacing:.01em}
+.occenq:hover,.occenq:focus-visible{text-decoration:underline}

@@ -7,6 +7,8 @@ import DealCard from '../../../components/DealCard'
 import Faq from '../../../components/Faq'
 import DealBox from '../../../components/DealBox'
 import { bookHref } from '../../../lib/booking-intent'
+import { RestaurantCtas } from '../../../components/EnquiryCta'
+import { getOutlets } from '../../../lib/outlets'
 import Gallery from '../../../components/Gallery'
 import Rating from '../../../components/Rating'
 import { JsonLd, restaurant as restaurantSchema, offer, breadcrumbs } from '../../../lib/schema'
@@ -59,6 +61,10 @@ export default async function RestaurantPage({ params }) {
   const { deals } = await getDeals()
   const mine = weekdayDeals(deals).filter(d => d.outlet === r.slug)
   const weekend = weekendDeals(deals).filter(d => d.outlet === r.slug)
+  /*  Whether this restaurant is bookable at all, decided from the LIVE deal
+   *  data rather than from a status string that could go stale. */
+  const hasDeals = mine.length + weekend.length > 0
+  const outlets = await getOutlets()
   const live = r.status === 'live'
   const enquiry = r.status === 'enquiry'
 
@@ -102,19 +108,25 @@ export default async function RestaurantPage({ params }) {
           </div>
           <p className="about">{r.about}</p>
 
-          <div className="ctarow">
-            {live ? <Link className="btn" href={bookHref({ outlet: r.name })} style={{ textDecoration: 'none' }}>Book a table</Link> : null}
-            {enquiry ? <Link className="btn" href={`/book?enquiry=${r.slug}`} style={{ textDecoration: 'none' }}>Enquire about a date</Link> : null}
-            <a className="btn ghost" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to ask about ${r.name}`)}`}
-               target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>Ask on WhatsApp</a>
-          </div>
+          {/*  Book a table | Enquire Now | Ask on WhatsApp — on every
+                restaurant page, and "Book a table" is never generic. With live
+                coupons it goes to THIS restaurant's own list; with none there
+                is no list to send anyone to, so it opens the enquiry form with
+                this restaurant already chosen.  */}
+          <RestaurantCtas
+            restaurant={{ slug: r.slug, name: r.name }}
+            hasDeals={hasDeals}
+            dealsAnchor="#coupons"
+            restaurants={outlets}
+            whatsapp={SITE.whatsapp}
+          />
             </div>
           </div>
         </div>
 
         {/* ── weekday deals ── */}
         {live && mine.length ? (
-          <div className="sec">
+          <div className="sec" id="coupons">
             <h2>Weekday coupons</h2>
             <p className="sub">Monday to Friday. All prices include taxes. The ₹{SITE.fee} reservation fee is charged separately.</p>
             {mine.map(d => <DealCard key={d.slug} deal={d} restaurant={r} />)}
@@ -123,7 +135,7 @@ export default async function RestaurantPage({ params }) {
 
         {/* ── weekend deals, kept apart because the rates differ ── */}
         {live && weekend.length ? (
-          <div className="sec">
+          <div className="sec" id={mine.length ? undefined : "coupons"}>
             <h2>Weekend coupons</h2>
             <p className="sub">Saturday and Sunday rates are different from weekdays — these apply only on those two days.</p>
             <div className="weekend">

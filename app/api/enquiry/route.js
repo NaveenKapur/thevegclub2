@@ -15,6 +15,7 @@
 import { NextResponse } from 'next/server'
 import { createReservation } from '../../../lib/crm'
 import { sendBookingAck } from '../../../lib/hermes'
+import { istToday } from '../../../lib/date-ist'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -34,7 +35,10 @@ function validate(b) {
   if (b.email && !EMAIL.test(b.email)) e.push('email')
   const adults = Number(b.adults || 0)
   if (adults < 1 || adults > 20) e.push('adults')
-  const today = new Date().toISOString().slice(0, 10)
+  // The booking is for a table in New Delhi, so "is this date in the past"
+  // is asked of the Indian calendar. toISOString() here would have rejected a
+  // legitimate same-day booking made after 18:30 UTC / midnight IST.
+  const today = istToday()
   if (b.date && b.date < today) e.push('date')
   return { errors: e, mobile }
 }

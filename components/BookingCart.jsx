@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
 import { quote, money, isWeekend, SERVICE, RACK, RESERVATION_FEE, CHARGE_TERMS } from '../lib/pricing'
+import { istToday, istPlusDays } from '../lib/date-ist'
 
 const MEALS = ['breakfast', 'lunch', 'dinner']
 
@@ -11,7 +12,11 @@ const SLOTS = {
   lunch:     [['12:30','12:30 PM'], ['13:00','1:00 PM'], ['13:30','1:30 PM'], ['14:00','2:00 PM']],
   dinner:    [['19:00','7:00 PM'], ['19:30','7:30 PM'], ['20:00','8:00 PM'], ['20:30','8:30 PM'], ['21:00','9:00 PM']],
 }
-const iso = d => d.toISOString().slice(0, 10)
+/*  Was `d.toISOString().slice(0,10)`, which converts to UTC first. IST is
+ *  UTC+5:30, so between midnight and 05:29 IST that returned YESTERDAY --
+ *  the guest tapping "Today" at 1 a.m. sent the CRM the previous day, and
+ *  that date was also below the picker's own min, so the form could reject a
+ *  date it had just filled in itself. See lib/date-ist.js.  */
 
 /*  `intent` is what the guest clicked to get here — meal, day, guests —
  *  already validated and resolved by lib/booking-intent.js on the server.
@@ -31,20 +36,19 @@ export default function BookingCart({ outletName = '64/6', intent = {} }) {
   const [done, setDone] = useState(null)
   const [failed, setFailed] = useState('')
 
-  const today = iso(new Date())
+  const today = istToday()
   /*  The prefilled date was chosen by the server. If the browser's clock
    *  has already rolled past it — a late-night click, a device in another
    *  timezone — drop it rather than leave a date the picker will refuse.  */
   useEffect(() => {
-    if (date && date < iso(new Date())) setDate('')
+    if (date && date < istToday()) setDate('')
   }, [])
   const weekend = isWeekend(date)
   const bill = useMemo(() => quote({ meal, guests, date }), [meal, guests, date])
 
   const quick = [
     { label: 'Today', v: today },
-    { label: 'Tomorrow', v: iso(new Date(Date.now() + 864e5)) },
-
+    { label: 'Tomorrow', v: istPlusDays(1) },
   ]
 
   async function submit(e) {
