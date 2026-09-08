@@ -1,6 +1,7 @@
 import BookingCart from '../../components/BookingCart'
 import { RACK, money } from '../../lib/pricing'
 import { pageMeta } from '../../lib/seo'
+import { parseBookingIntent } from '../../lib/booking-intent'
 
 export const metadata = pageMeta({
   title: 'Book a Table — 64/6, Sahibabad',
@@ -14,6 +15,11 @@ export default async function Book({ searchParams }) {
   const p = await searchParams
   const isTatva = p?.r === 'tatva'
   const outlet = isTatva ? 'Tatva' : '64/6'
+  /*  The deal the guest clicked, resolved here on the server. The date in
+   *  particular has to be decided server-side: "the soonest Saturday" computed
+   *  inside the client component would be a different string on the server
+   *  than in the browser, and hydration would tear.  */
+  const intent = parseBookingIntent(p || {})
 
   return (
     <main>
@@ -28,7 +34,7 @@ export default async function Book({ searchParams }) {
             <b>per guest</b>
           </p>
         )}
-        <BookingCart outletName={outlet} />
+        <BookingCart outletName={outlet} intent={intent} />
       </div>
     </main>
   )

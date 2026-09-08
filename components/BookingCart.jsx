@@ -13,11 +13,17 @@ const SLOTS = {
 }
 const iso = d => d.toISOString().slice(0, 10)
 
-export default function BookingCart({ outletName = '64/6' }) {
-  const [guests, setGuests] = useState(2)
+/*  `intent` is what the guest clicked to get here — meal, day, guests —
+ *  already validated and resolved by lib/booking-intent.js on the server.
+ *  Every field is optional: an empty intent gives exactly the old defaults,
+ *  so a bare /book is unchanged.  */
+export default function BookingCart({ outletName = '64/6', intent = {} }) {
+  const [guests, setGuests] = useState(intent.guests || 2)
   const [kids, setKids] = useState(0)
-  const [meal, setMeal] = useState(outletName === 'Tatva' ? 'dinner' : 'breakfast')
-  const [date, setDate] = useState('')
+  const [meal, setMeal] = useState(
+    intent.meal || (outletName === 'Tatva' ? 'dinner' : 'breakfast'),
+  )
+  const [date, setDate] = useState(intent.date || '')
   const [time, setTime] = useState('')
   const [form, setForm] = useState({ name: '', mobile: '', email: '', requests: '' })
   const [bad, setBad] = useState({})
@@ -26,6 +32,12 @@ export default function BookingCart({ outletName = '64/6' }) {
   const [failed, setFailed] = useState('')
 
   const today = iso(new Date())
+  /*  The prefilled date was chosen by the server. If the browser's clock
+   *  has already rolled past it — a late-night click, a device in another
+   *  timezone — drop it rather than leave a date the picker will refuse.  */
+  useEffect(() => {
+    if (date && date < iso(new Date())) setDate('')
+  }, [])
   const weekend = isWeekend(date)
   const bill = useMemo(() => quote({ meal, guests, date }), [meal, guests, date])
 
@@ -180,6 +192,11 @@ export default function BookingCart({ outletName = '64/6' }) {
           </div>
           <label className="lbl" htmlFor="date" style={{ marginTop: 4 }}>Or choose a date</label>
           <input type="date" id="date" min={today} value={date} onChange={e => setDate(e.target.value)} />
+          {intent.date && date === intent.date ? (
+            <p className="prefilled">
+              Prefilled from the {weekend ? 'weekend' : 'weekday'} deal you chose — change it if you like.
+            </p>
+          ) : null}
           {date ? (
             <p className={'daynote' + (weekend ? ' wknd' : '')}>
               {weekend
@@ -309,7 +326,7 @@ export default function BookingCart({ outletName = '64/6' }) {
             <p className="err">Please check that email address.</p>
           </div>
           <details className="more">
-            <summary>Anything we should know? (optional)</summary>
+            <summary>Any Special Requests? (optional)</summary>
             <div className="fgroup">
               <textarea placeholder="No onion no garlic, birthday cake, wheelchair access, high chair…"
                 value={form.requests} onChange={e => setForm({ ...form, requests: e.target.value })} />

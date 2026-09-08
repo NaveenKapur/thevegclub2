@@ -930,3 +930,57 @@ aside.dealbox .eyebrow{
     subordinate to the code and the QR the guest is actually showing. */
 .coupon-terms{margin:8px 0 0;font-size:11.5px;line-height:1.5;color:var(--ink-3);max-width:34ch;margin-inline:auto;text-align:center}
 .chargerule{display:block;color:var(--ink);margin-bottom:4px}
+
+/* ── header brand lockup ───────────────────────────────────────────────
+   The existing mark (public/brand/logo.svg) beside a three-line wordmark.
+   The header bar grows from 52px to 60px and no further; the caption is the
+   first thing dropped when there is no room for it.                    */
+.hdr .wrap{height:60px}
+.logo.lockup{display:flex;align-items:center;gap:10px}
+.lockup-mark{width:36px;height:36px;flex:none;border-radius:50%;display:block}
+.lockup-text{display:flex;flex-direction:column;justify-content:center;line-height:1}
+.lockup-name{font-family:var(--f-display);font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.lockup-region{display:block;font-family:var(--f-body);font-size:9px;letter-spacing:.2em;
+  color:var(--ink-3);font-weight:700;margin-top:2px}
+.lockup-caption{display:block;font-family:var(--f-body);font-size:10.5px;letter-spacing:.01em;
+  color:var(--brass);font-weight:600;margin-top:3px;white-space:nowrap}
+@media(max-width:379px){
+  .lockup-caption{display:none}
+  .hdr .wrap{height:52px}
+  .lockup-mark{width:30px;height:30px}
+  .lockup-name{font-size:16px}
+}
+
+/*  The secondary action on the failed-payment screen.
+    A 1px --cta-line border on a cream panel reads as a suggestion; a guest
+    whose payment just failed should not have to hunt for the way back. Two
+    pixels of forest green, the text in the same green, and a filled hover so
+    it is still plainly the quieter of the two buttons.                */
+.done .btn.ghost{
+  border-width:2px;
+  border-color:var(--forest);
+  color:var(--forest);
+  font-weight:700;
+  background:transparent
+}
+.done .btn.ghost:hover,
+.done .btn.ghost:focus-visible{
+  background:var(--forest);
+  border-color:var(--forest);
+  color:var(--on-forest)
+}
+.done .btn.ghost:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .done .btn.ghost{border-color:var(--cta-line);color:var(--cta-line)}
+  :root:not([data-theme="light"]) .done .btn.ghost:hover,
+  :root:not([data-theme="light"]) .done .btn.ghost:focus-visible{
+    background:var(--cta-line);border-color:var(--cta-line);color:#0B1410}
+}
+:root[data-theme="dark"] .done .btn.ghost{border-color:var(--cta-line);color:var(--cta-line)}
+:root[data-theme="dark"] .done .btn.ghost:hover,
+:root[data-theme="dark"] .done .btn.ghost:focus-visible{
+  background:var(--cta-line);border-color:var(--cta-line);color:#0B1410}
+
+/*  A deal click that carried a day with it says so, rather than leaving the
+    guest to wonder why a date is already filled in.                    */
+.prefilled{font-size:12px;color:var(--brass);margin:6px 0 0;font-weight:600}

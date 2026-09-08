@@ -6,6 +6,7 @@ import { getDeals } from '../../../lib/crm'
 import DealCard from '../../../components/DealCard'
 import Faq from '../../../components/Faq'
 import DealBox from '../../../components/DealBox'
+import { bookHref } from '../../../lib/booking-intent'
 import Gallery from '../../../components/Gallery'
 import Rating from '../../../components/Rating'
 import { JsonLd, restaurant as restaurantSchema, offer, breadcrumbs } from '../../../lib/schema'
@@ -102,7 +103,7 @@ export default async function RestaurantPage({ params }) {
           <p className="about">{r.about}</p>
 
           <div className="ctarow">
-            {live ? <Link className="btn" href="/book" style={{ textDecoration: 'none' }}>Book a table</Link> : null}
+            {live ? <Link className="btn" href={bookHref({ outlet: r.name })} style={{ textDecoration: 'none' }}>Book a table</Link> : null}
             {enquiry ? <Link className="btn" href={`/book?enquiry=${r.slug}`} style={{ textDecoration: 'none' }}>Enquire about a date</Link> : null}
             <a className="btn ghost" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hi, I'd like to ask about ${r.name}`)}`}
                target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>Ask on WhatsApp</a>

@@ -1,11 +1,19 @@
 import Link from 'next/link'
 import { money } from '../lib/pricing'
+import { bookHref, dealIntent } from '../lib/booking-intent'
 
 export function saving(d) { return d.savingPct ?? null }
 
 export default function DealCard({ deal, restaurant }) {
   const off = deal.savingPct
   const pair = deal.type === 'one_plus_one'
+  /*  "Book this deal" now means it. The card knows the meal, the day and the
+   *  cover count it is advertising, so it hands all three to /book rather than
+   *  dropping the guest on the breakfast default and making them rebuild it. */
+  const href = bookHref({
+    ...dealIntent(deal),
+    outlet: deal.outlet === 'tatva' ? 'Tatva' : undefined,
+  })
   return (
     <div className="deal">
       <div className="nm">
@@ -30,7 +38,7 @@ export default function DealCard({ deal, restaurant }) {
       </div>
 
       <div className="cta">
-        <Link className="btn ghost" href="/book" style={{ textDecoration: 'none', display: 'inline-block' }}>
+        <Link className="btn ghost" href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>
           Book this deal
         </Link>
       </div>

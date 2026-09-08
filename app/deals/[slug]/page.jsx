@@ -6,6 +6,13 @@ import DealCard from '../../../components/DealCard'
 import Link from 'next/link'
 import { JsonLd, offerList, breadcrumbs } from '../../../lib/schema'
 import { pageMeta } from '../../../lib/seo'
+import { bookHref } from '../../../lib/booking-intent'
+
+/*  Three of the six hubs are a single meal, and on those the Book a table
+ *  button should not land on breakfast. The other three (buffet, 1+1, 50%
+ *  off) span meals and carry no meal intent -- undefined, so the form keeps
+ *  its default.  */
+const MEAL_HUBS = { lunch: 'lunch', dinner: 'dinner', breakfast: 'breakfast' }
 
 export const revalidate = 300
 
@@ -76,7 +83,7 @@ export default async function Hub({ params }) {
           : <p className="sub">No live deals in this category right now.</p>}
 
         <div className="ctarow" style={{ marginTop: 22 }}>
-          <Link className="btn" href="/book" style={{ textDecoration: 'none' }}>Book a table</Link>
+          <Link className="btn" href={bookHref({ meal: MEAL_HUBS[params.slug] })} style={{ textDecoration: 'none' }}>Book a table</Link>
           <Link className="btn ghost" href="/deals" style={{ textDecoration: 'none' }}>← Back to all deals</Link>
         </div>
 
